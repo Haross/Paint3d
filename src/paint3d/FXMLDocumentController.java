@@ -34,7 +34,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Group root;
-    
+    //hola
     private PerspectiveCamera camera;
      @FXML
     private void setC(ActionEvent event) {
