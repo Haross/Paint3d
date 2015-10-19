@@ -16,6 +16,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -31,6 +32,9 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Button btnBox;
+    
+    @FXML
+    private SplitPane Split;
     
     @FXML
     private Group root;
@@ -68,6 +72,7 @@ public class FXMLDocumentController implements Initializable {
         Platform.runLater(() ->  initSceneAndCamera());
     } 
     private void initSceneAndCamera() {
+      
         this.camera = new PerspectiveCamera(true);
         this.camera.setNearClip(0.1);
         this.camera.setFarClip(20000.0);
