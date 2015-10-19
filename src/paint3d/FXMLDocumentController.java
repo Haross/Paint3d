@@ -56,6 +56,8 @@ public class FXMLDocumentController implements Initializable {
         ryBox.setAngle(40);
         rzBox.setAngle(0);
         box.getTransforms().addAll(rxBox, ryBox, rzBox);
+        
+        //¿Que hay?
     }
     
     @Override
