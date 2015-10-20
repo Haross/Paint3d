@@ -22,11 +22,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.Sphere;
+import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 
 /**
  *
- * @author Javier
+ * @author Javier, Josseline, Hugo
  */
 public class FXMLDocumentController implements Initializable {
     
@@ -40,30 +43,44 @@ public class FXMLDocumentController implements Initializable {
     private Group root;
     //hola
     private PerspectiveCamera camera;
+    PhongMaterial blueStuff = new PhongMaterial();
      @FXML
     private void setC(ActionEvent event) {
-       
-        PhongMaterial blueStuff = new PhongMaterial();
-        blueStuff.setDiffuseColor(Color.LIGHTBLUE);
-        blueStuff.setSpecularColor(Color.BLUE);
-               
+       addCylinder();
+       addBox();
+       addSphere();
+    }
+ 
+    public void addBox(){
         Box box = new Box(100, 100, 100);
         box.setMaterial(blueStuff);
         box.setTranslateX(150);
         box.setTranslateY(100);
         box.setTranslateZ(-100);
-       root.getChildren().add(box);
+        root.getChildren().add(box);
         Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryBox = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
         Rotate rzBox = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
-         rxBox.setAngle(30);
+        rxBox.setAngle(30);
         ryBox.setAngle(40);
         rzBox.setAngle(0);
         box.getTransforms().addAll(rxBox, ryBox, rzBox);
-        
-        //¿Que hay?
     }
-    
+    public void addCylinder(){
+        Cylinder cylinder = new Cylinder(100,50); 
+        root.getChildren().add(cylinder);
+        cylinder.setMaterial(blueStuff);
+        cylinder.setTranslateX(200); 
+        cylinder.setTranslateY(200); 
+        cylinder.setTranslateZ(200);
+    }
+    public void addSphere(){
+        Sphere sphere = new Sphere(100);
+        sphere.setTranslateX(180);
+        sphere.setTranslateY(100);
+        sphere.setTranslateZ(100);
+        root.getChildren().add(sphere);
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
@@ -72,6 +89,7 @@ public class FXMLDocumentController implements Initializable {
         iv.setFitHeight(30);
         btnBox.setGraphic(iv);
         Platform.runLater(() ->  initSceneAndCamera());
+        initColors();
     } 
     private void initSceneAndCamera() {
       
@@ -90,13 +108,16 @@ public class FXMLDocumentController implements Initializable {
         g.getChildren().add(light);
 
         SubScene scene3d;
-        scene3d = new SubScene(g,300,300);
+        scene3d = new SubScene(g,650,620);
         scene3d.setFill(Color.WHITE);
         scene3d.setCamera(this.camera);
         scene3d.setPickOnBounds(true);
        
         this.root.getChildren().add(scene3d);
+    }   
+    
+    private void initColors(){
+        blueStuff.setDiffuseColor(Color.LIGHTBLUE);
+        blueStuff.setSpecularColor(Color.BLUE);
     }
-    
-    
 }
