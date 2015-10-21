@@ -48,7 +48,7 @@ public class FXMLDocumentController implements Initializable {
     private void setC(ActionEvent event) {
        addCylinder();
        addBox();
-       addSphere();
+      // addSphere();
     }
  
     public void addBox(){
@@ -107,13 +107,13 @@ public class FXMLDocumentController implements Initializable {
         light.setTranslateZ(-1000);
         g.getChildren().add(light);
 
-        SubScene scene3d;
+        /*SubScene scene3d;
         scene3d = new SubScene(g,650,620);
         scene3d.setFill(Color.WHITE);
         scene3d.setCamera(this.camera);
         scene3d.setPickOnBounds(true);
        
-        this.root.getChildren().add(scene3d);
+        this.root.getChildren().add(scene3d);*/
     }   
     
     private void initColors(){
