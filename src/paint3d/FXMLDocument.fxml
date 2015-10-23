@@ -15,9 +15,10 @@
     </AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="620.0" prefWidth="89.0" style="-fx-background-color: lightblue;">
          <children>
-            <Button fx:id="btnBox" layoutX="4.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB"/>
+            <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB"/>
             <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC"/>
             <Button fx:id="btnSphere" layoutX="5.0" layoutY="148.0" mnemonicParsing="false" onAction="#setS"/>
+             <Button fx:id="btnPyramid" layoutX="5.0" layoutY="192.0" mnemonicParsing="false" onAction="#setP"/>
          </children>
       </AnchorPane>
     </children>

@@ -23,6 +23,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
@@ -41,6 +43,9 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Button btnSphere;
+    
+    @FXML
+    private Button btnPyramid;
     
     @FXML
     private SplitPane Split;
@@ -64,6 +69,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void setS(ActionEvent event){
         addSphere();
+    }
+    
+    @FXML
+    private void setP(ActionEvent event){
+        addTriangle();
     }
     
     
@@ -98,6 +108,37 @@ public class FXMLDocumentController implements Initializable {
         sphere.setTranslateZ(100);
         root.getChildren().add(sphere);
     }
+    private void addTriangle(){
+        TriangleMesh pyramidMesh = new TriangleMesh();
+        pyramidMesh.getTexCoords().addAll(0,0);
+    float h = 175;                    // Height
+    float s = 300;                    // Side
+        pyramidMesh.getPoints().addAll(
+        0,    0,    0,            // Point 0 - Top
+        0,    h,    -s/2,         // Point 1 - Front
+        -s/2, h,    0,            // Point 2 - Left
+        s/2,  h,    0,            // Point 3 - Back
+        0,    h,    s/2           // Point 4 - Right
+    );
+        pyramidMesh.getFaces().addAll(
+        0,0,  2,0,  1,0,          // Front left face
+        0,0,  1,0,  3,0,          // Front right face
+        0,0,  3,0,  4,0,          // Back right face
+        0,0,  4,0,  2,0,          // Back left face
+        4,0,  1,0,  2,0,          // Bottom rear face
+        4,0,  3,0,  1,0           // Bottom front face
+    ); 
+    MeshView pyramid = new MeshView(pyramidMesh);
+    pyramid.setDrawMode(DrawMode.FILL);
+    pyramid.setMaterial(blueStuff);
+    pyramid.setTranslateX(250);
+    pyramid.setTranslateY(250);
+    pyramid.setTranslateZ(100);
+    root.getChildren().add(pyramid);
+    
+    
+    
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
@@ -117,6 +158,12 @@ public class FXMLDocumentController implements Initializable {
         isp.setFitHeight(30);
         isp.setFitWidth(30);
         btnSphere.setGraphic(isp);
+        
+        Image imagePyramid = new Image(getClass().getResourceAsStream("pyramid.jpg"));
+        ImageView ipy = new ImageView(imagePyramid);
+        ipy.setFitHeight(30);
+        ipy.setFitWidth(30);
+        btnPyramid.setGraphic(ipy);
         
         
         initColors();
