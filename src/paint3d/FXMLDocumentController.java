@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
 import javafx.scene.SubScene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
@@ -135,10 +136,23 @@ public class FXMLDocumentController implements Initializable {
     pyramid.setTranslateY(250);
     pyramid.setTranslateZ(100);
     root.getChildren().add(pyramid);
-    
-    
-    
     }
+    
+    @FXML
+    private void closeButtonAction(){
+        System.exit(0);
+    }
+    
+    @FXML
+    private void AcercaDe(){
+        Alert alert=new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Créditos");
+        alert.setHeaderText("Universidad Politécnica de Chiapas");
+        alert.setContentText("Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
+        alert.showAndWait();
+    }
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
