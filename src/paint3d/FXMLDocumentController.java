@@ -8,6 +8,8 @@ package paint3d;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,8 +24,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
@@ -54,7 +58,8 @@ public class FXMLDocumentController implements Initializable {
    
     @FXML
     private SubScene sub1;
-   Group root ; 
+    Group root ; 
+    
 
     private PerspectiveCamera camera;
     PhongMaterial blueStuff = new PhongMaterial();
@@ -79,10 +84,9 @@ public class FXMLDocumentController implements Initializable {
         addTriangle();
     }
     
-    
- 
     public void addBox(){
         Box box = new Box(100, 100, 100);
+        box.setCullFace(CullFace.BACK);
         box.setMaterial(blueStuff);
         box.setTranslateX(30);
         box.setTranslateY(30);
@@ -106,9 +110,11 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addSphere(){
         Sphere sphere = new Sphere(100);
+        sphere.setCullFace(CullFace.BACK);
         sphere.setTranslateX(30);
         sphere.setTranslateY(30);
         sphere.setTranslateZ(30);
+        sphere.setMaterial(blueStuff);
         root.getChildren().add(sphere);
     }
     private void addTriangle(){
@@ -133,6 +139,7 @@ public class FXMLDocumentController implements Initializable {
     ); 
     MeshView pyramid = new MeshView(pyramidMesh);
     pyramid.setDrawMode(DrawMode.FILL);
+    pyramid.setCullFace(CullFace.BACK);
     pyramid.setMaterial(blueStuff);
     pyramid.setTranslateX(30);
     pyramid.setTranslateY(30);
@@ -185,7 +192,7 @@ public class FXMLDocumentController implements Initializable {
         isp.setFitWidth(30);
         btnSphere.setGraphic(isp);
         
-        Image imagePyramid = new Image(getClass().getResourceAsStream("pyramid.jpg"));
+        Image imagePyramid = new Image(getClass().getResourceAsStream("pyramid.png"));
         ImageView ipy = new ImageView(imagePyramid);
         ipy.setFitHeight(30);
         ipy.setFitWidth(30);
@@ -197,7 +204,7 @@ public class FXMLDocumentController implements Initializable {
     
     
     private void initColors(){
-        blueStuff.setDiffuseColor(Color.LIGHTBLUE);
-        blueStuff.setSpecularColor(Color.BLUE);
+        blueStuff.setDiffuseColor(Color.RED);
+        blueStuff.setSpecularColor(Color.WHITE);
     }
 }
