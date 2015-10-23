@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" layoutX="-367.0" layoutY="-310.0" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
+<AnchorPane id="AnchorPane" layoutX="-367.0" layoutY="-310.0" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
     <children>
     <AnchorPane layoutX="90.0" layoutY="0.0" minHeight="0.0" minWidth="0.0" prefHeight="597.0" prefWidth="635.0">
          <children>
             <Group fx:id="root" layoutX="0.0" layoutY="0.0" />
          </children>
     </AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="620.0" prefWidth="89.0" style="-fx-background-color: red;">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="620.0" prefWidth="89.0" style="-fx-background-color: lightblue;">
          <children>
-            <Button fx:id="btnBox" layoutX="4.0" layoutY="45.0" mnemonicParsing="false" onAction="#setC" />
+            <Button fx:id="btnBox" layoutX="4.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB"/>
+            <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC"/>
+            <Button fx:id="btnSphere" layoutX="5.0" layoutY="148.0" mnemonicParsing="false" onAction="#setS"/>
          </children>
       </AnchorPane>
     </children>

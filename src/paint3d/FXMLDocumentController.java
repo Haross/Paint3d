@@ -37,6 +37,12 @@ public class FXMLDocumentController implements Initializable {
     private Button btnBox;
     
     @FXML
+    private Button btnCylinder;
+    
+    @FXML
+    private Button btnSphere;
+    
+    @FXML
     private SplitPane Split;
     
     @FXML
@@ -45,11 +51,22 @@ public class FXMLDocumentController implements Initializable {
     private PerspectiveCamera camera;
     PhongMaterial blueStuff = new PhongMaterial();
      @FXML
-    private void setC(ActionEvent event) {
-       addCylinder();
+    private void setB(ActionEvent event) {
        addBox();
-      // addSphere();
+      // 
     }
+    
+    @FXML
+    private void setC(ActionEvent event){
+        addCylinder();
+    }
+    
+    @FXML
+    private void setS(ActionEvent event){
+        addSphere();
+    }
+    
+    
  
     public void addBox(){
         Box box = new Box(100, 100, 100);
@@ -88,33 +105,23 @@ public class FXMLDocumentController implements Initializable {
         iv.setFitWidth(30);
         iv.setFitHeight(30);
         btnBox.setGraphic(iv);
-        Platform.runLater(() ->  initSceneAndCamera());
+        
+        Image imageCylinder = new Image(getClass().getResourceAsStream("cilindro.png"));
+        ImageView ic = new ImageView(imageCylinder);
+        ic.setFitWidth(30);
+        ic.setFitHeight(30);
+        btnCylinder.setGraphic(ic);
+        
+        Image imageSphere = new Image(getClass().getResourceAsStream("esfera.png"));
+        ImageView isp = new ImageView(imageSphere);
+        isp.setFitHeight(30);
+        isp.setFitWidth(30);
+        btnSphere.setGraphic(isp);
+        
+        
         initColors();
     } 
-    private void initSceneAndCamera() {
-      
-        this.camera = new PerspectiveCamera(true);
-        this.camera.setNearClip(0.1);
-        this.camera.setFarClip(20000.0);
-        this.camera.setTranslateZ(-1000);
-        this.camera.setFieldOfView(35);
-        
-        Group g = new Group();
-        
-        PointLight light = new PointLight(Color.WHITE);
-        light.setTranslateX(-1000);
-        light.setTranslateY(100);
-        light.setTranslateZ(-1000);
-        g.getChildren().add(light);
-
-        /*SubScene scene3d;
-        scene3d = new SubScene(g,650,620);
-        scene3d.setFill(Color.WHITE);
-        scene3d.setCamera(this.camera);
-        scene3d.setPickOnBounds(true);
-       
-        this.root.getChildren().add(scene3d);*/
-    }   
+    
     
     private void initColors(){
         blueStuff.setDiffuseColor(Color.LIGHTBLUE);
