@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -52,8 +53,11 @@ public class FXMLDocumentController implements Initializable {
     private SplitPane Split;
     
     @FXML
-    private Group root;
-   
+    public Group root;
+    @FXML
+    private SubScene sub1;
+   Group sub1Group ; 
+
     private PerspectiveCamera camera;
     PhongMaterial blueStuff = new PhongMaterial();
      @FXML
@@ -85,7 +89,7 @@ public class FXMLDocumentController implements Initializable {
         box.setTranslateX(150);
         box.setTranslateY(100);
         box.setTranslateZ(-100);
-        root.getChildren().add(box);
+        sub1Group.getChildren().add(box);
         Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryBox = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
         Rotate rzBox = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
@@ -96,7 +100,7 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addCylinder(){
         Cylinder cylinder = new Cylinder(100,50); 
-        root.getChildren().add(cylinder);
+        sub1Group.getChildren().add(cylinder);
         cylinder.setMaterial(blueStuff);
         cylinder.setTranslateX(200); 
         cylinder.setTranslateY(200); 
@@ -155,6 +159,16 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+          sub1Group = new Group(); 
+        sub1Group.setId("sub1GroupID");
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.setNearClip(0.1);
+        camera.setFarClip(20000.0);
+        camera.setTranslateZ(-1000);
+        camera.setFieldOfView(35);
+        sub1.setCamera(camera);
+        sub1.setRoot(sub1Group); 
+        
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
         ImageView iv = new ImageView(imageBox);
         iv.setFitWidth(30);

@@ -7,9 +7,13 @@ package paint3d;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -23,12 +27,17 @@ public class Paint3d extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         Scene scene = new Scene(root,700,600);
         PerspectiveCamera camera = new PerspectiveCamera(true);
-        camera.setNearClip(0.1);
+        /*camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
         camera.setTranslateZ(-1000);
-        camera.setFieldOfView(35);
-        scene.setCamera(camera);
-        stage.setResizable(false);
+        camera.setFieldOfView(35);*/
+       // Group gp = new Group();
+        //SubScene sb = new SubScene(gp,500,500);
+        //((Pane) scene.getRoot()).getChildren().add(scene1.getRoot());
+        //sb.setCamera(camera);
+       // sb.setFill(Color.RED);
+       // root.add(sb);
+       // stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
         
