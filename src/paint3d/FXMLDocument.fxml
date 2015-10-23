@@ -49,7 +49,7 @@
             </items>
           </Menu>
         </menus>
-      </MenuBar>
+      </MenuBar> 
        </children>
       </AnchorPane>
     </children>

@@ -21,7 +21,6 @@ public class Paint3d extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
         Scene scene = new Scene(root,700,600);
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
