@@ -31,6 +31,7 @@ public class Paint3d extends Application {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+        
     }
 
     /**
