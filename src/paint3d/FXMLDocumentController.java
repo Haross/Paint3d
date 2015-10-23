@@ -51,12 +51,10 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private SplitPane Split;
-    
-    @FXML
-    public Group root;
+   
     @FXML
     private SubScene sub1;
-   Group sub1Group ; 
+   Group root ; 
 
     private PerspectiveCamera camera;
     PhongMaterial blueStuff = new PhongMaterial();
@@ -89,7 +87,7 @@ public class FXMLDocumentController implements Initializable {
         box.setTranslateX(150);
         box.setTranslateY(100);
         box.setTranslateZ(-100);
-        sub1Group.getChildren().add(box);
+        root.getChildren().add(box);
         Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryBox = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
         Rotate rzBox = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
@@ -100,7 +98,7 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addCylinder(){
         Cylinder cylinder = new Cylinder(100,50); 
-        sub1Group.getChildren().add(cylinder);
+        root.getChildren().add(cylinder);
         cylinder.setMaterial(blueStuff);
         cylinder.setTranslateX(200); 
         cylinder.setTranslateY(200); 
@@ -159,15 +157,15 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-          sub1Group = new Group(); 
-        sub1Group.setId("sub1GroupID");
+        root = new Group(); 
+        root.setId("sub1GroupID");
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
         camera.setTranslateZ(-1000);
         camera.setFieldOfView(35);
         sub1.setCamera(camera);
-        sub1.setRoot(sub1Group); 
+        sub1.setRoot(root); 
         
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
         ImageView iv = new ImageView(imageBox);
