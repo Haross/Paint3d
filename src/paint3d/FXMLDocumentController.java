@@ -84,8 +84,8 @@ public class FXMLDocumentController implements Initializable {
     public void addBox(){
         Box box = new Box(100, 100, 100);
         box.setMaterial(blueStuff);
-        box.setTranslateX(150);
-        box.setTranslateY(100);
+        box.setTranslateX(30);
+        box.setTranslateY(30);
         box.setTranslateZ(-100);
         root.getChildren().add(box);
         Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
@@ -100,15 +100,15 @@ public class FXMLDocumentController implements Initializable {
         Cylinder cylinder = new Cylinder(100,50); 
         root.getChildren().add(cylinder);
         cylinder.setMaterial(blueStuff);
-        cylinder.setTranslateX(200); 
-        cylinder.setTranslateY(200); 
-        cylinder.setTranslateZ(200);
+        cylinder.setTranslateX(30); 
+        cylinder.setTranslateY(-150); 
+        cylinder.setTranslateZ(30);
     }
     public void addSphere(){
         Sphere sphere = new Sphere(100);
-        sphere.setTranslateX(180);
-        sphere.setTranslateY(100);
-        sphere.setTranslateZ(100);
+        sphere.setTranslateX(30);
+        sphere.setTranslateY(30);
+        sphere.setTranslateZ(30);
         root.getChildren().add(sphere);
     }
     private void addTriangle(){
@@ -134,9 +134,9 @@ public class FXMLDocumentController implements Initializable {
     MeshView pyramid = new MeshView(pyramidMesh);
     pyramid.setDrawMode(DrawMode.FILL);
     pyramid.setMaterial(blueStuff);
-    pyramid.setTranslateX(250);
-    pyramid.setTranslateY(250);
-    pyramid.setTranslateZ(100);
+    pyramid.setTranslateX(30);
+    pyramid.setTranslateY(30);
+    pyramid.setTranslateZ(30);
     root.getChildren().add(pyramid);
     }
     
