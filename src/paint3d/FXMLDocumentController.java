@@ -53,7 +53,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Group root;
-    //hola
+   
     private PerspectiveCamera camera;
     PhongMaterial blueStuff = new PhongMaterial();
      @FXML
