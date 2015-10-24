@@ -58,12 +58,14 @@ public class FXMLDocumentController implements Initializable {
     
     Group root = new Group(); 
     private String figura = "";
-    private PerspectiveCamera camera;
     boolean inDrag = false;
     double startX = -1, startY = -1;
-    double curX = -1, curY = -1;
     PhongMaterial blueStuff = new PhongMaterial();
+    //Contadores de las figuras
     int contadorS = 0;
+    int contadorB = 0;
+    int contadorP = 0;
+    int contadorC = 0;
     String a = "";
     
      @FXML
@@ -89,7 +91,7 @@ public class FXMLDocumentController implements Initializable {
         figura = "pyramid";
         System.out.println("La figura actual es "+ figura);
     }
-    
+    //Función para acomodar las coordenadas
     private double posX(double x){
         if(x<=370){
             return -370+x;
@@ -97,6 +99,7 @@ public class FXMLDocumentController implements Initializable {
             return (x - 371) * (370 - 1) / (740 - 371) + 1;
         }
     }
+    //Función para acomodar las coordenadas
     private double posY(double y){
         if(y<=315){
             return -315+y;
@@ -109,16 +112,14 @@ public class FXMLDocumentController implements Initializable {
     private void onMousePressedListener(MouseEvent e){
         this.startX = e.getX();
         this.startY = e.getY();
+        //Funcion para activar la lectura del drag en la funcion de drag
         inDrag = true;
         System.err.println("mousePressed at" + startX + ", "+ startY);
     }  
     @FXML
-    private void onMouseReleased(MouseEvent e){
-         curX = e.getX();
-         curY = e.getY();
-         System.out.println(curX);
-         //double w = curX - startX; 
-         //double h = curY - startY;         
+    private void drag(MouseEvent e){
+         double curX = e.getX();
+         //curY = e.getY();         
          if (inDrag == true) {
              switch(figura){
                  case "box": 
@@ -142,15 +143,31 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onReleased(MouseEvent e){
         inDrag = false;
-        contadorS++;
+        //Este switch es para aumentar los contadores para el id
+        //porque si no se aumentan se elmina la figura dibujada anterior siempre
+        switch(figura){
+            case "box": 
+                contadorB++;
+                break;
+            case "cylinder": 
+                contadorC++;
+                break;
+            case "sphere": 
+                contadorS++;
+                break;
+            case "pyramid": 
+                contadorP++;
+                break;
+             }
     }
     public void remove(String cadena){
+       //se hace el contador -1 para eliminar la figura anterior del drag 
        contadorS = contadorS-1;
+       //Se concatena el id. 
        String id = "#"+cadena + contadorS; 
-        //Elimina todas las figuras
+       //Elimina todas las figuras
        //root.getChildren().clear();
-        System.out.println(root.getChildren());
-        System.out.println(root.getChildren().remove(root.lookup(id)));
+       root.getChildren().remove(root.lookup(id));
     }
     public void addBox(){
         Box box = new Box(100, 100, 100);
@@ -183,6 +200,7 @@ public class FXMLDocumentController implements Initializable {
         sphere.setTranslateY(y);
         sphere.setTranslateZ(30);
         sphere.setMaterial(blueStuff);
+        //Se asigna un id a la esfera para poder elminarla facilmente
         sphere.setId("sphere"+contadorS++);
         root.getChildren().add(sphere);
     }
@@ -233,7 +251,6 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //root.setId("sub1GroupID");
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
