@@ -5,26 +5,22 @@
  */
 package paint3d;
 
+import java.awt.event.MouseEvent;
+import static java.lang.Math.abs;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.CullFace;
@@ -58,30 +54,37 @@ public class FXMLDocumentController implements Initializable {
    
     @FXML
     private SubScene sub1;
-    Group root ; 
+    Group root;
+    private String figura = "";
+    private PerspectiveCamera camera;
+    boolean inDrag = false;
+    double startX = -1, startY = -1;
+    double curX = -1, curY = -1;
     
 
-    private PerspectiveCamera camera;
     PhongMaterial blueStuff = new PhongMaterial();
      @FXML
-    private void setB(ActionEvent event) {
-       addBox();
-      // 
+   private void setB(ActionEvent event) {
+        figura = "box";
+        System.out.println("La figura actual es "+ figura);
     }
     
     @FXML
     private void setC(ActionEvent event){
-        addCylinder();
+        figura = "cylinder";
+        System.out.println("La figura actual es "+ figura);
     }
     
     @FXML
     private void setS(ActionEvent event){
-        addSphere();
+        figura = "sphere";
+        System.out.println("La figura actual es "+ figura);
     }
     
     @FXML
     private void setP(ActionEvent event){
-        addTriangle();
+        figura = "pyramid";
+        System.out.println("La figura actual es "+ figura);
     }
     
     public void addBox(){
@@ -108,11 +111,11 @@ public class FXMLDocumentController implements Initializable {
         cylinder.setTranslateY(-150); 
         cylinder.setTranslateZ(30);
     }
-    public void addSphere(){
-        Sphere sphere = new Sphere(100);
+    public void addSphere(double x, double y, double radio){
+        Sphere sphere = new Sphere(radio);
         sphere.setCullFace(CullFace.BACK);
-        sphere.setTranslateX(30);
-        sphere.setTranslateY(30);
+        sphere.setTranslateX(x);
+        sphere.setTranslateY(y);
         sphere.setTranslateZ(30);
         sphere.setMaterial(blueStuff);
         root.getChildren().add(sphere);
@@ -206,5 +209,46 @@ public class FXMLDocumentController implements Initializable {
     private void initColors(){
         blueStuff.setDiffuseColor(Color.RED);
         blueStuff.setSpecularColor(Color.WHITE);
+    }
+    
+    private double posX(double x){
+        if(x<370){
+            return -370+x;
+        }else{
+            return x*370/740;
+        }
+    }
+    private double posY(double y){
+        if(y<315){
+            return -315+y;
+        }else{
+            return y*315/630;
+        }
+    }
+    @FXML
+    private void onMousePressedListener(MouseEvent e){
+        this.startX = posX(e.getX());
+        this.startY = posY(e.getY());
+        inDrag = true;
+        System.err.println("mousePressed at" + startX + ", "+ startY);
+    }  
+    @FXML
+    private void onMouseReleased(MouseEvent e){
+         curX = e.getX();
+         curY = e.getY();
+         //double w = curX - startX; 
+         //double h = curY - startY;         
+         if (inDrag == true) {
+             switch(figura){
+                 case "box": break;
+                 case "cylinder": 
+                     break;
+                 case "sphere": 
+                     addSphere(startX,startY,abs((curX-startX))/4);
+                     break;
+                 case "pyramid": break;
+             }
+            inDrag = false;  
+        }
     }
 }
