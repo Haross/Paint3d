@@ -9,15 +9,11 @@ package paint3d;
 import static java.lang.Math.abs;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -25,9 +21,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.CullFace;
@@ -61,13 +55,17 @@ public class FXMLDocumentController implements Initializable {
    
     @FXML
     private SubScene sub1;
-       Group root;
+    
+    Group root = new Group(); 
     private String figura = "";
     private PerspectiveCamera camera;
     boolean inDrag = false;
     double startX = -1, startY = -1;
     double curX = -1, curY = -1;
     PhongMaterial blueStuff = new PhongMaterial();
+    int contadorS = 0;
+    String a = "";
+    
      @FXML
     private void setB(ActionEvent event) {
         figura = "box";
@@ -93,24 +91,24 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private double posX(double x){
-        if(x<370){
+        if(x<=370){
             return -370+x;
         }else{
-            return x*370/740;
+            return (x - 371) * (370 - 1) / (740 - 371) + 1;
         }
     }
     private double posY(double y){
-        if(y<315){
+        if(y<=315){
             return -315+y;
-        }else{
-            return y*315/630;
+        }else{ 
+           return (y - 316) * (316 -1) / (630 - 316) + 1;
         }
     }
-    //Hola
+
     @FXML
     private void onMousePressedListener(MouseEvent e){
-        this.startX = posX(e.getX());
-        this.startY = posY(e.getY());
+        this.startX = e.getX();
+        this.startY = e.getY();
         inDrag = true;
         System.err.println("mousePressed at" + startX + ", "+ startY);
     }  
@@ -118,6 +116,7 @@ public class FXMLDocumentController implements Initializable {
     private void onMouseReleased(MouseEvent e){
          curX = e.getX();
          curY = e.getY();
+         System.out.println(curX);
          //double w = curX - startX; 
          //double h = curY - startY;         
          if (inDrag == true) {
@@ -129,14 +128,29 @@ public class FXMLDocumentController implements Initializable {
                      addCylinder();
                      break;
                  case "sphere": 
-                     addSphere(startX,startY,abs((curX-startX))/4);
+                     remove("sphere");
+                     addSphere(posX(startX),posY(startY),abs((curX-startX))/2);
                      break;
                  case "pyramid": 
                      addTriangle();
                      break;
              }
-            inDrag = false;  
+             
         }
+    }
+    
+    @FXML
+    private void onReleased(MouseEvent e){
+        inDrag = false;
+        contadorS++;
+    }
+    public void remove(String cadena){
+       contadorS = contadorS-1;
+       String id = "#"+cadena + contadorS; 
+        //Elimina todas las figuras
+       //root.getChildren().clear();
+        System.out.println(root.getChildren());
+        System.out.println(root.getChildren().remove(root.lookup(id)));
     }
     public void addBox(){
         Box box = new Box(100, 100, 100);
@@ -169,6 +183,7 @@ public class FXMLDocumentController implements Initializable {
         sphere.setTranslateY(y);
         sphere.setTranslateZ(30);
         sphere.setMaterial(blueStuff);
+        sphere.setId("sphere"+contadorS++);
         root.getChildren().add(sphere);
     }
     private void addTriangle(){
@@ -218,8 +233,7 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        root = new Group(); 
-        root.setId("sub1GroupID");
+        //root.setId("sub1GroupID");
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
@@ -227,6 +241,7 @@ public class FXMLDocumentController implements Initializable {
         camera.setFieldOfView(35);
         sub1.setCamera(camera);
         sub1.setRoot(root); 
+        
         
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
         ImageView iv = new ImageView(imageBox);
