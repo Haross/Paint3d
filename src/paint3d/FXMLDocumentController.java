@@ -139,7 +139,9 @@ public class FXMLDocumentController implements Initializable {
                      //se hace el contador -1 para eliminar la figura anterior del drag 
                      contadorS = contadorS-1;
                      id = "#"+figura+contadorS;
+                     //método que elimina figura
                      root.getChildren().remove(root.lookup(id));
+                     //se crea nueva figura
                      addSphere(posX(startX),posY(startY),abs((curX-startX)));
                      break;
                  case "pyramid": 
