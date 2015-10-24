@@ -133,7 +133,7 @@ public class FXMLDocumentController implements Initializable {
                      contadorC = contadorC-1;
                      id = "#"+figura+contadorC;
                      root.getChildren().remove(root.lookup(id));
-                     addCylinder();
+                     addCylinder(posX(startX),posY(startY),abs((curX-startX)));
                      break;
                  case "sphere": 
                      //se hace el contador -1 para eliminar la figura anterior del drag 
@@ -148,7 +148,7 @@ public class FXMLDocumentController implements Initializable {
                      contadorP = contadorP -1;
                      id = "#"+figura+contadorP;
                      root.getChildren().remove(root.lookup(id));
-                     addTriangle();
+                     addTriangle(posX(startX),posY(startY),(float)abs((curX-startX)*2));
                      break;
              }
              //Elimina todas las figuras
@@ -196,13 +196,22 @@ public class FXMLDocumentController implements Initializable {
         rzBox.setAngle(0);
         box.getTransforms().addAll(rxBox, ryBox, rzBox);
     }
-    public void addCylinder(){
-        Cylinder cylinder = new Cylinder(100,50); 
+    public void addCylinder(double x, double y, double radio){
+        Cylinder cylinder = new Cylinder(radio,radio*2); 
+        cylinder.setId("cylinder"+contadorC++);
         root.getChildren().add(cylinder);
         cylinder.setMaterial(blueStuff);
-        cylinder.setTranslateX(30); 
-        cylinder.setTranslateY(-150); 
-        cylinder.setTranslateZ(30);
+        cylinder.setTranslateX(x); 
+        cylinder.setTranslateY(y); 
+        cylinder.setTranslateZ(300);
+        Rotate rxC = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
+        Rotate ryC = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
+        Rotate rzC = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
+        rxC.setAngle(30);
+        ryC.setAngle(40);
+        rzC.setAngle(0);
+        cylinder.getTransforms().addAll(rxC, ryC, rzC);
+        
     }
     public void addSphere(double x, double y, double radio){
         Sphere sphere = new Sphere(radio);
@@ -215,10 +224,10 @@ public class FXMLDocumentController implements Initializable {
         sphere.setId("sphere"+contadorS++);
         root.getChildren().add(sphere);
     }
-    private void addTriangle(){
+    private void addTriangle(double x, double y, float h){
         TriangleMesh pyramidMesh = new TriangleMesh();
         pyramidMesh.getTexCoords().addAll(0,0);
-    float h = 175;                    // Height
+     //h = 175;                    // Height
     float s = 300;                    // Side
         pyramidMesh.getPoints().addAll(
         0,    0,    0,            // Point 0 - Top
@@ -236,11 +245,12 @@ public class FXMLDocumentController implements Initializable {
         4,0,  3,0,  1,0           // Bottom front face
     ); 
     MeshView pyramid = new MeshView(pyramidMesh);
+    pyramid.setId("pyramid"+contadorP++);
     pyramid.setDrawMode(DrawMode.FILL);
     pyramid.setCullFace(CullFace.BACK);
     pyramid.setMaterial(blueStuff);
-    pyramid.setTranslateX(30);
-    pyramid.setTranslateY(30);
+    pyramid.setTranslateX(x);
+    pyramid.setTranslateY(y);
     pyramid.setTranslateZ(30);
     root.getChildren().add(pyramid);
     }
