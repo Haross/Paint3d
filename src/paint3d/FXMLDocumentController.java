@@ -119,23 +119,38 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void drag(MouseEvent e){
          double curX = e.getX();
-         //curY = e.getY();         
+         String id ="";        
          if (inDrag == true) {
              switch(figura){
                  case "box": 
-                     addBox();
+                     //Contador para quitar anterior
+                     contadorB =contadorB-1;
+                     id = "#"+figura+contadorB;
+                     root.getChildren().remove(root.lookup(id));
+                     addBox(posX(startX),posY(startY),abs((curX-startX)));
                      break;
                  case "cylinder": 
+                     contadorC = contadorC-1;
+                     id = "#"+figura+contadorC;
+                     root.getChildren().remove(root.lookup(id));
                      addCylinder();
                      break;
                  case "sphere": 
-                     remove("sphere");
-                     addSphere(posX(startX),posY(startY),abs((curX-startX))/2);
+                     //se hace el contador -1 para eliminar la figura anterior del drag 
+                     contadorS = contadorS-1;
+                     id = "#"+figura+contadorS;
+                     root.getChildren().remove(root.lookup(id));
+                     addSphere(posX(startX),posY(startY),abs((curX-startX)));
                      break;
                  case "pyramid": 
+                     contadorP = contadorP -1;
+                     id = "#"+figura+contadorP;
+                     root.getChildren().remove(root.lookup(id));
                      addTriangle();
                      break;
              }
+             //Elimina todas las figuras
+            //root.getChildren().clear();
              
         }
     }
@@ -160,21 +175,15 @@ public class FXMLDocumentController implements Initializable {
                 break;
              }
     }
-    public void remove(String cadena){
-       //se hace el contador -1 para eliminar la figura anterior del drag 
-       contadorS = contadorS-1;
-       //Se concatena el id. 
-       String id = "#"+cadena + contadorS; 
-       //Elimina todas las figuras
-       //root.getChildren().clear();
-       root.getChildren().remove(root.lookup(id));
-    }
-    public void addBox(){
-        Box box = new Box(100, 100, 100);
+
+    public void addBox(double x, double y, double tam){
+        Box box = new Box(tam, tam,tam);
+        //Se asigna un id a la esfera para poder elminarla facilmente
+        box.setId("box"+contadorB++);
         box.setCullFace(CullFace.BACK);
         box.setMaterial(blueStuff);
-        box.setTranslateX(30);
-        box.setTranslateY(30);
+        box.setTranslateX(x);
+        box.setTranslateY(y);
         box.setTranslateZ(-100);
         root.getChildren().add(box);
         Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
