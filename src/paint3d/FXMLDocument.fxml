@@ -8,9 +8,9 @@
 <AnchorPane id="AnchorPane" prefHeight="653.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
     <children>
         
-    <AnchorPane layoutX="90.0" layoutY="30.0" prefHeight="597.0" prefWidth="635.0">
+    <AnchorPane  layoutX="90.0" layoutY="30.0" prefHeight="597.0" prefWidth="635.0">
          <children> 
-            <SubScene fx:id="sub1" fill="WHITE" height="642.0" layoutX="-21.0" layoutY="-15.0" width="746.0">
+            <SubScene fx:id="sub1" onMousePressed="#onMousePressedListener" onMouseReleased="#onMouseReleased"    fill="WHITE" height="642.0" layoutX="-21.0" layoutY="-15.0" width="746.0">
               <root>
                 <Region />
               </root>

@@ -1,26 +1,33 @@
-/*
+
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package paint3d;
 
-import java.awt.event.MouseEvent;
 import static java.lang.Math.abs;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.PointLight;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.CullFace;
@@ -54,17 +61,15 @@ public class FXMLDocumentController implements Initializable {
    
     @FXML
     private SubScene sub1;
-    Group root;
+       Group root;
     private String figura = "";
     private PerspectiveCamera camera;
     boolean inDrag = false;
     double startX = -1, startY = -1;
     double curX = -1, curY = -1;
-    
-
     PhongMaterial blueStuff = new PhongMaterial();
      @FXML
-   private void setB(ActionEvent event) {
+    private void setB(ActionEvent event) {
         figura = "box";
         System.out.println("La figura actual es "+ figura);
     }
@@ -80,13 +85,59 @@ public class FXMLDocumentController implements Initializable {
         figura = "sphere";
         System.out.println("La figura actual es "+ figura);
     }
-    
+    //c:
     @FXML
     private void setP(ActionEvent event){
         figura = "pyramid";
         System.out.println("La figura actual es "+ figura);
     }
     
+    private double posX(double x){
+        if(x<370){
+            return -370+x;
+        }else{
+            return x*370/740;
+        }
+    }
+    private double posY(double y){
+        if(y<315){
+            return -315+y;
+        }else{
+            return y*315/630;
+        }
+    }
+    //Hola
+    @FXML
+    private void onMousePressedListener(MouseEvent e){
+        this.startX = posX(e.getX());
+        this.startY = posY(e.getY());
+        inDrag = true;
+        System.err.println("mousePressed at" + startX + ", "+ startY);
+    }  
+    @FXML
+    private void onMouseReleased(MouseEvent e){
+         curX = e.getX();
+         curY = e.getY();
+         //double w = curX - startX; 
+         //double h = curY - startY;         
+         if (inDrag == true) {
+             switch(figura){
+                 case "box": 
+                     addBox();
+                     break;
+                 case "cylinder": 
+                     addCylinder();
+                     break;
+                 case "sphere": 
+                     addSphere(startX,startY,abs((curX-startX))/4);
+                     break;
+                 case "pyramid": 
+                     addTriangle();
+                     break;
+             }
+            inDrag = false;  
+        }
+    }
     public void addBox(){
         Box box = new Box(100, 100, 100);
         box.setCullFace(CullFace.BACK);
@@ -210,45 +261,6 @@ public class FXMLDocumentController implements Initializable {
         blueStuff.setDiffuseColor(Color.RED);
         blueStuff.setSpecularColor(Color.WHITE);
     }
-    
-    private double posX(double x){
-        if(x<370){
-            return -370+x;
-        }else{
-            return x*370/740;
-        }
-    }
-    private double posY(double y){
-        if(y<315){
-            return -315+y;
-        }else{
-            return y*315/630;
-        }
-    }
-    @FXML
-    private void onMousePressedListener(MouseEvent e){
-        this.startX = posX(e.getX());
-        this.startY = posY(e.getY());
-        inDrag = true;
-        System.err.println("mousePressed at" + startX + ", "+ startY);
-    }  
-    @FXML
-    private void onMouseReleased(MouseEvent e){
-         curX = e.getX();
-         curY = e.getY();
-         //double w = curX - startX; 
-         //double h = curY - startY;         
-         if (inDrag == true) {
-             switch(figura){
-                 case "box": break;
-                 case "cylinder": 
-                     break;
-                 case "sphere": 
-                     addSphere(startX,startY,abs((curX-startX))/4);
-                     break;
-                 case "pyramid": break;
-             }
-            inDrag = false;  
-        }
-    }
+
+//
 }
