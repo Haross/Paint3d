@@ -17,6 +17,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,7 +38,10 @@ import javafx.scene.transform.Rotate;
  * @author Javier, Josseline, Hugo
  */
 public class FXMLDocumentController implements Initializable {
-    //h
+    
+    @FXML
+    private ColorPicker colorPicker;
+    
     @FXML
     private Button btnBox;
     
@@ -60,7 +64,11 @@ public class FXMLDocumentController implements Initializable {
     private String figura = "";
     boolean inDrag = false;
     double startX = -1, startY = -1;
-    PhongMaterial blueStuff = new PhongMaterial();
+    PhongMaterial b = new PhongMaterial();
+    PhongMaterial c = new PhongMaterial();
+    PhongMaterial s = new PhongMaterial();
+    PhongMaterial p = new PhongMaterial();
+    
     //Contadores de las figuras
     int contadorS = 0;
     int contadorB = 0;
@@ -180,10 +188,11 @@ public class FXMLDocumentController implements Initializable {
 
     public void addBox(double x, double y, double tam){
         Box box = new Box(tam, tam,tam);
+        b.setDiffuseColor(colorPicker.getValue());
+        box.setMaterial(b);
         //Se asigna un id a la esfera para poder elminarla facilmente
         box.setId("box"+contadorB++);
         box.setCullFace(CullFace.BACK);
-        box.setMaterial(blueStuff);
         box.setTranslateX(x);
         box.setTranslateY(y);
         box.setTranslateZ(-100);
@@ -198,9 +207,10 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addCylinder(double x, double y, double radio){
         Cylinder cylinder = new Cylinder(radio,radio*2); 
+        c.setDiffuseColor(colorPicker.getValue());
+        cylinder.setMaterial(c);
         cylinder.setId("cylinder"+contadorC++);
         root.getChildren().add(cylinder);
-        cylinder.setMaterial(blueStuff);
         cylinder.setTranslateX(x); 
         cylinder.setTranslateY(y); 
         cylinder.setTranslateZ(300);
@@ -215,11 +225,12 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addSphere(double x, double y, double radio){
         Sphere sphere = new Sphere(radio);
+         s.setDiffuseColor(colorPicker.getValue());
+        sphere.setMaterial(s);
         sphere.setCullFace(CullFace.BACK);
         sphere.setTranslateX(x);
         sphere.setTranslateY(y);
         sphere.setTranslateZ(30);
-        sphere.setMaterial(blueStuff);
         //Se asigna un id a la esfera para poder elminarla facilmente
         sphere.setId("sphere"+contadorS++);
         root.getChildren().add(sphere);
@@ -248,7 +259,8 @@ public class FXMLDocumentController implements Initializable {
     pyramid.setId("pyramid"+contadorP++);
     pyramid.setDrawMode(DrawMode.FILL);
     pyramid.setCullFace(CullFace.BACK);
-    pyramid.setMaterial(blueStuff);
+    p.setDiffuseColor(colorPicker.getValue());
+    pyramid.setMaterial(p);
     pyramid.setTranslateX(x);
     pyramid.setTranslateY(y);
     pyramid.setTranslateZ(30);
@@ -279,8 +291,7 @@ public class FXMLDocumentController implements Initializable {
         camera.setFieldOfView(35);
         sub1.setCamera(camera);
         sub1.setRoot(root); 
-        
-        
+
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
         ImageView iv = new ImageView(imageBox);
         iv.setFitWidth(30);
@@ -305,14 +316,18 @@ public class FXMLDocumentController implements Initializable {
         ipy.setFitWidth(30);
         btnPyramid.setGraphic(ipy);
         
-        
+      /*  String hex2 = "#" + Integer.toHexString(colorPicker.getValue().hashCode()); 
+        System.out.println("color : " + hex2);
+        */
+
         initColors();
     } 
     
     
     private void initColors(){
-        blueStuff.setDiffuseColor(Color.RED);
-        blueStuff.setSpecularColor(Color.WHITE);
+       // blueStuff.setDiffuseColor(Color.RED);
+       // blueStuff.setSpecularColor(Color.PINK);
+    
     }
 
 //

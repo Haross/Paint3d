@@ -8,15 +8,16 @@
 <AnchorPane id="AnchorPane" prefHeight="653.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
     <children>
         
-    <AnchorPane  layoutX="90.0" layoutY="30.0" prefHeight="597.0" prefWidth="635.0">
+    <AnchorPane layoutX="90.0" layoutY="30.0" prefHeight="597.0" prefWidth="635.0">
          <children> 
-            <SubScene fx:id="sub1" onMousePressed="#onMousePressedListener" onMouseDragged="#drag" onMouseReleased="#onReleased"    fill="WHITE" height="642.0" layoutX="-21.0" layoutY="-15.0" width="746.0">
+            <SubScene fx:id="sub1" fill="WHITE" height="642.0" layoutX="-21.0" layoutY="-15.0" onMouseDragged="#drag" onMousePressed="#onMousePressedListener" onMouseReleased="#onReleased" width="746.0">
               <root>
                 <Region />
               </root>
             </SubScene>
             <ToolBar layoutX="-91.0" layoutY="-11.0" orientation="VERTICAL" prefHeight="635.0" prefWidth="70.0">
               <items>
+                  <ColorPicker fx:id="colorPicker" prefHeight="25.0" prefWidth="45.0" />
                    <Button fx:id="btnPyramid" layoutX="5.0" layoutY="203.0" mnemonicParsing="false" onAction="#setP" />
                   <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB" />
                   <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC" />
