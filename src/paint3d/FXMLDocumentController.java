@@ -64,10 +64,6 @@ public class FXMLDocumentController implements Initializable {
     private String figura = "";
     boolean inDrag = false;
     double startX = -1, startY = -1;
-    PhongMaterial b = new PhongMaterial();
-    PhongMaterial c = new PhongMaterial();
-    PhongMaterial s = new PhongMaterial();
-    PhongMaterial p = new PhongMaterial();
     
     //Contadores de las figuras
     int contadorS = 0;
@@ -188,6 +184,7 @@ public class FXMLDocumentController implements Initializable {
 
     public void addBox(double x, double y, double tam){
         Box box = new Box(tam, tam,tam);
+        PhongMaterial b = new PhongMaterial();
         b.setDiffuseColor(colorPicker.getValue());
         box.setMaterial(b);
         //Se asigna un id a la esfera para poder elminarla facilmente
@@ -207,6 +204,7 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addCylinder(double x, double y, double radio){
         Cylinder cylinder = new Cylinder(radio,radio*2); 
+        PhongMaterial c = new PhongMaterial();
         c.setDiffuseColor(colorPicker.getValue());
         cylinder.setMaterial(c);
         cylinder.setId("cylinder"+contadorC++);
@@ -225,6 +223,7 @@ public class FXMLDocumentController implements Initializable {
     }
     public void addSphere(double x, double y, double radio){
         Sphere sphere = new Sphere(radio);
+        PhongMaterial s = new PhongMaterial();
          s.setDiffuseColor(colorPicker.getValue());
         sphere.setMaterial(s);
         sphere.setCullFace(CullFace.BACK);
@@ -259,6 +258,7 @@ public class FXMLDocumentController implements Initializable {
     pyramid.setId("pyramid"+contadorP++);
     pyramid.setDrawMode(DrawMode.FILL);
     pyramid.setCullFace(CullFace.BACK);
+    PhongMaterial p = new PhongMaterial();
     p.setDiffuseColor(colorPicker.getValue());
     pyramid.setMaterial(p);
     pyramid.setTranslateX(x);
