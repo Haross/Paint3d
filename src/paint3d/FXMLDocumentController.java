@@ -187,6 +187,9 @@ public class FXMLDocumentController implements Initializable {
         PhongMaterial b = new PhongMaterial();
         b.setDiffuseColor(colorPicker.getValue());
         box.setMaterial(b);
+        box.setOnMousePressed((e) ->{
+            b.setDiffuseColor(colorPicker.getValue());
+        });
         //Se asigna un id a la esfera para poder elminarla facilmente
         box.setId("box"+contadorB++);
         box.setCullFace(CullFace.BACK);
@@ -212,6 +215,9 @@ public class FXMLDocumentController implements Initializable {
         cylinder.setTranslateX(x); 
         cylinder.setTranslateY(y); 
         cylinder.setTranslateZ(300);
+        cylinder.setOnMousePressed((e) ->{
+            c.setDiffuseColor(colorPicker.getValue());
+        });
         Rotate rxC = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryC = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
         Rotate rzC = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
@@ -230,6 +236,9 @@ public class FXMLDocumentController implements Initializable {
         sphere.setTranslateX(x);
         sphere.setTranslateY(y);
         sphere.setTranslateZ(30);
+        sphere.setOnMousePressed((e) ->{
+            s.setDiffuseColor(colorPicker.getValue());
+        });
         //Se asigna un id a la esfera para poder elminarla facilmente
         sphere.setId("sphere"+contadorS++);
         root.getChildren().add(sphere);
@@ -260,6 +269,9 @@ public class FXMLDocumentController implements Initializable {
     pyramid.setCullFace(CullFace.BACK);
     PhongMaterial p = new PhongMaterial();
     p.setDiffuseColor(colorPicker.getValue());
+    pyramid.setOnMousePressed((e) ->{
+            p.setDiffuseColor(colorPicker.getValue());
+        });
     pyramid.setMaterial(p);
     pyramid.setTranslateX(x);
     pyramid.setTranslateY(y);
