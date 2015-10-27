@@ -22,6 +22,7 @@
                   <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB" />
                   <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC" />
                   <Button fx:id="btnSphere" layoutX="5.0" layoutY="150.0" mnemonicParsing="false" onAction="#setS" />
+                  <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" text="Borrar" onAction="#borrar" />
               </items>
             </ToolBar>
          </children>

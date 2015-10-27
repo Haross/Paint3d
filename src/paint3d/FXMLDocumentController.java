@@ -43,16 +43,7 @@ public class FXMLDocumentController implements Initializable {
     private ColorPicker colorPicker;
     
     @FXML
-    private Button btnBox;
-    
-    @FXML
-    private Button btnCylinder;
-    
-    @FXML
-    private Button btnSphere;
-    
-    @FXML
-    private Button btnPyramid;
+    private Button btnBox, btnCylinder, btnSphere,btnPyramid,btnBorrar;
     
     @FXML
     private SplitPane Split;
@@ -64,7 +55,7 @@ public class FXMLDocumentController implements Initializable {
     private String figura = "";
     boolean inDrag = false;
     double startX = -1, startY = -1;
-    
+    boolean borrar = false;
     //Contadores de las figuras
     int contadorS = 0;
     int contadorB = 0;
@@ -77,7 +68,9 @@ public class FXMLDocumentController implements Initializable {
         figura = "box";
         System.out.println("La figura actual es "+ figura);
     }
-    
+    @FXML private void borrar(){
+        borrar = true;
+    }
     @FXML
     private void setC(ActionEvent event){
         figura = "cylinder";
@@ -189,6 +182,10 @@ public class FXMLDocumentController implements Initializable {
         box.setMaterial(b);
         box.setOnMousePressed((e) ->{
             b.setDiffuseColor(colorPicker.getValue());
+            if(borrar){
+                borrar = false;
+                root.getChildren().remove(box);
+            }   
         });
         //Se asigna un id a la esfera para poder elminarla facilmente
         box.setId("box"+contadorB++);
@@ -217,6 +214,10 @@ public class FXMLDocumentController implements Initializable {
         cylinder.setTranslateZ(300);
         cylinder.setOnMousePressed((e) ->{
             c.setDiffuseColor(colorPicker.getValue());
+            if(borrar){
+                borrar = false;
+                root.getChildren().remove(cylinder);
+            }   
         });
         Rotate rxC = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryC = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
@@ -230,7 +231,7 @@ public class FXMLDocumentController implements Initializable {
     public void addSphere(double x, double y, double radio){
         Sphere sphere = new Sphere(radio);
         PhongMaterial s = new PhongMaterial();
-         s.setDiffuseColor(colorPicker.getValue());
+        s.setDiffuseColor(colorPicker.getValue());
         sphere.setMaterial(s);
         sphere.setCullFace(CullFace.BACK);
         sphere.setTranslateX(x);
@@ -238,6 +239,10 @@ public class FXMLDocumentController implements Initializable {
         sphere.setTranslateZ(30);
         sphere.setOnMousePressed((e) ->{
             s.setDiffuseColor(colorPicker.getValue());
+            if(borrar){
+                borrar = false;
+                root.getChildren().remove(sphere);
+            }   
         });
         //Se asigna un id a la esfera para poder elminarla facilmente
         sphere.setId("sphere"+contadorS++);
@@ -271,6 +276,10 @@ public class FXMLDocumentController implements Initializable {
     p.setDiffuseColor(colorPicker.getValue());
     pyramid.setOnMousePressed((e) ->{
             p.setDiffuseColor(colorPicker.getValue());
+            if(borrar){
+                borrar = false;
+                root.getChildren().remove(pyramid);
+            }   
         });
     pyramid.setMaterial(p);
     pyramid.setTranslateX(x);
@@ -328,19 +337,7 @@ public class FXMLDocumentController implements Initializable {
         ipy.setFitWidth(30);
         btnPyramid.setGraphic(ipy);
         
-      /*  String hex2 = "#" + Integer.toHexString(colorPicker.getValue().hashCode()); 
-        System.out.println("color : " + hex2);
-        */
-
-        initColors();
+     
     } 
-    
-    
-    private void initColors(){
-       // blueStuff.setDiffuseColor(Color.RED);
-       // blueStuff.setSpecularColor(Color.PINK);
-    
-    }
 
-//
 }
