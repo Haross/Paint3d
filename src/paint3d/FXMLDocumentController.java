@@ -22,13 +22,16 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
@@ -43,10 +46,7 @@ public class FXMLDocumentController implements Initializable {
     private ColorPicker colorPicker;
     
     @FXML
-    private Button btnBox, btnCylinder, btnSphere,btnPyramid,btnBorrar;
-    
-    @FXML
-    private SplitPane Split;
+    private Button btnBox, btnPac, btnCylinder, btnSphere,btnPyramid,btnBorrar;
    
     @FXML
     private SubScene sub1;
@@ -57,16 +57,15 @@ public class FXMLDocumentController implements Initializable {
     double startX = -1, startY = -1;
     boolean borrar = false;
     //Contadores de las figuras
-    int contadorS = 0;
-    int contadorB = 0;
-    int contadorP = 0;
-    int contadorC = 0;
-    String a = "";
+    int contadorS = 0,contadorB = 0,contadorP = 0,contadorC = 0,contadorRec=0;
     
+     @FXML
+    private void setRec(ActionEvent event) {
+        figura = "rec";
+    }
      @FXML
     private void setB(ActionEvent event) {
         figura = "box";
-        System.out.println("La figura actual es "+ figura);
     }
     @FXML private void borrar(){
         borrar = true;
@@ -74,26 +73,23 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void setC(ActionEvent event){
         figura = "cylinder";
-        System.out.println("La figura actual es "+ figura);
     }
     
     @FXML
     private void setS(ActionEvent event){
         figura = "sphere";
-        System.out.println("La figura actual es "+ figura);
     }
-    //c:
+   
     @FXML
     private void setP(ActionEvent event){
         figura = "pyramid";
-        System.out.println("La figura actual es "+ figura);
     }
     //Función para acomodar las coordenadas
     private double posX(double x){
         if(x<=370){
             return -370+x;
         }else{
-            return (x - 371) * (370 - 1) / (740 - 371) + 1;
+            return (x - 371) + 1;
         }
     }
     //Función para acomodar las coordenadas
@@ -101,7 +97,7 @@ public class FXMLDocumentController implements Initializable {
         if(y<=315){
             return -315+y;
         }else{ 
-           return (y - 316) * (316 -1) / (630 - 316) + 1;
+           return (y - 316) * (315) / (314) + 1;
         }
     }
 
@@ -116,6 +112,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void drag(MouseEvent e){
          double curX = e.getX();
+         double curY = e.getY();
          String id ="";        
          if (inDrag == true) {
              switch(figura){
@@ -147,6 +144,13 @@ public class FXMLDocumentController implements Initializable {
                      root.getChildren().remove(root.lookup(id));
                      addTriangle(posX(startX),posY(startY),(float)abs((curX-startX)*2));
                      break;
+                 case "rec":
+                     contadorRec = contadorRec-1;
+                     id = "#"+figura+contadorRec;
+                     System.out.println(root.getChildren().remove(root.lookup(id)));
+                     
+                     addRec(posX(startX),posY(startY),abs((curX-startX)),abs((curY-startY)));
+                     break;
              }
              //Elimina todas las figuras
             //root.getChildren().clear();
@@ -172,9 +176,21 @@ public class FXMLDocumentController implements Initializable {
             case "pyramid": 
                 contadorP++;
                 break;
+            case "rec":
+                contadorRec++;
+                break;
              }
     }
-
+    public void addRec(double x, double y,double w,double h){
+        Rectangle r = new Rectangle();
+        r.setId("rec"+contadorRec++);
+        r.setX(x);
+        r.setY(y);
+        r.setWidth(w);
+        r.setHeight(h);
+        root.getChildren().add(r);
+    }
+    
     public void addBox(double x, double y, double tam){
         Box box = new Box(tam, tam,tam);
         PhongMaterial b = new PhongMaterial();
@@ -292,16 +308,7 @@ public class FXMLDocumentController implements Initializable {
     private void closeButtonAction(){
         System.exit(0);
     }
-    
-    @FXML
-    private void AcercaDe(){
-        Alert alert=new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Créditos");
-        alert.setHeaderText("Universidad Politécnica de Chiapas");
-        alert.setContentText("Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
-        alert.showAndWait();
-    }
-    
+ 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -312,7 +319,7 @@ public class FXMLDocumentController implements Initializable {
         camera.setFieldOfView(35);
         sub1.setCamera(camera);
         sub1.setRoot(root); 
-
+       
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
         ImageView iv = new ImageView(imageBox);
         iv.setFitWidth(30);
@@ -339,5 +346,12 @@ public class FXMLDocumentController implements Initializable {
         
      
     } 
-
+    @FXML
+    private void AcercaDe(){
+        Alert alert=new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Créditos");
+        alert.setHeaderText("Universidad Politécnica de Chiapas");
+        alert.setContentText("Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
+        alert.showAndWait();
+    }
 }
