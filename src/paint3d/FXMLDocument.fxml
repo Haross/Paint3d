@@ -14,9 +14,6 @@
               <root>
                 <Region />
               </root>
-               <cursor>
-                  <Cursor fx:constant="CROSSHAIR" />
-               </cursor>
             </SubScene>
             <ToolBar layoutX="-91.0" layoutY="-11.0" orientation="VERTICAL" prefHeight="635.0" prefWidth="70.0">
               <items>
@@ -25,7 +22,8 @@
                   <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB" />
                   <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC" />
                   <Button fx:id="btnSphere" layoutX="5.0" layoutY="150.0" mnemonicParsing="false" onAction="#setS" />
-                  <Button fx:id="btnRect" mnemonicParsing="false" onAction="#setRec" />
+                  <Button fx:id="btnRect"   mnemonicParsing="false" onAction="#setRec" />
+                   <Button fx:id="btnLine"  mnemonicParsing="false" onAction="#setLine" />
                   <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" onAction="#borrar" />
               </items>
             </ToolBar>
@@ -40,7 +38,7 @@
     </Menu>
     <Menu text="Editar">
       <items>
-        <MenuItem mnemonicParsing="false" text="Restablecer" />
+        <MenuItem mnemonicParsing="false" text="Restablecer" onAction="#clear"/>
             <Menu mnemonicParsing="false" text="Figuras 3D">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#setB" text="Cubo" />
@@ -52,9 +50,7 @@
             <Menu mnemonicParsing="false" text="Figuras 2D">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#setRec" text="Rectangulo" />
-                  <MenuItem mnemonicParsing="false" text="" />
-                  <MenuItem mnemonicParsing="false" text="" />
-                  <MenuItem mnemonicParsing="false" text="" />
+                  <MenuItem mnemonicParsing="false" onAction="#setLine" text="Linea" />
               </items>
             </Menu>
       </items>

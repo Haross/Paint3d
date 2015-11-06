@@ -12,7 +12,9 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
@@ -30,7 +32,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
@@ -46,7 +50,7 @@ public class FXMLDocumentController implements Initializable {
     private ColorPicker colorPicker;
     
     @FXML
-    private Button btnBox, btnRect, btnCylinder, btnSphere,btnPyramid,btnBorrar;
+    private Button btnBox, btnRect, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
    
     @FXML
     private SubScene sub1;
@@ -57,7 +61,7 @@ public class FXMLDocumentController implements Initializable {
     double startX = -1, startY = -1;
     boolean borrar = false;
     //Contadores de las figuras
-    int contadorS = 0,contadorB = 0,contadorP = 0,contadorC = 0,contadorRec=0;
+    int contadorS = 0,contadorLine = 0,contadorB = 0,contadorP = 0,contadorC = 0,contadorRec=0;
     
      @FXML
     private void setRec(ActionEvent event) {
@@ -69,10 +73,15 @@ public class FXMLDocumentController implements Initializable {
     }
     @FXML private void borrar(){
         borrar = true;
+        cursorBorrador();
     }
     @FXML
     private void setC(ActionEvent event){
         figura = "cylinder";
+    }
+     @FXML
+    private void setLine(ActionEvent event){
+        figura = "line";
     }
     
     @FXML
@@ -115,14 +124,14 @@ public class FXMLDocumentController implements Initializable {
          double curY = e.getY();
          String id ="";        
          if (inDrag == true) {
+             sub1.setCursor(Cursor.CROSSHAIR);
              switch(figura){
                  case "box": 
                      //Contador para quitar anterior
                      contadorB =contadorB-1;
                      id = "#"+figura+contadorB;
                      root.getChildren().remove(root.lookup(id));
-                     addBox(posX(startX),posY(startY),abs((curX-startX)));
-                     break;
+                     addBox(posX(startX),posY(startY),abs((curX-startX))*2);                     break;
                  case "cylinder": 
                      contadorC = contadorC-1;
                      id = "#"+figura+contadorC;
@@ -148,8 +157,13 @@ public class FXMLDocumentController implements Initializable {
                      contadorRec = contadorRec-1;
                      id = "#"+figura+contadorRec;
                      System.out.println(root.getChildren().remove(root.lookup(id)));
-                     
                      addRec(posX(startX),posY(startY),abs((curX-startX)),abs((curY-startY)));
+                     break;
+                 case "line":
+                     contadorLine = contadorLine-1;
+                     id = "#"+figura+contadorLine;
+                     root.getChildren().remove(root.lookup(id));
+                     addLine(posX(startX),posY(startY),posX(curX),posY(curY));
                      break;
              }
              //Elimina todas las figuras
@@ -158,9 +172,14 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
+    @FXML void clear(ActionEvent event){
+        root.getChildren().clear();
+    }
+    
     @FXML
     private void onReleased(MouseEvent e){
         inDrag = false;
+        sub1.setCursor(Cursor.DEFAULT);
         //Este switch es para aumentar los contadores para el id
         //porque si no se aumentan se elmina la figura dibujada anterior siempre
         switch(figura){
@@ -179,6 +198,9 @@ public class FXMLDocumentController implements Initializable {
             case "rec":
                 contadorRec++;
                 break;
+            case "line":
+                contadorLine++;
+                break;
              }
     }
     public void addRec(double x, double y,double w,double h){
@@ -187,8 +209,8 @@ public class FXMLDocumentController implements Initializable {
         r.setFill(colorPicker.getValue());
         r.setX(x);
         r.setY(y);
-        r.setWidth(w);
-        r.setHeight(h);
+        r.setWidth(w-5);
+        r.setHeight(h-5);
         root.getChildren().add(r);
         r.setOnMousePressed((e) ->{
             r.setFill(colorPicker.getValue());
@@ -199,14 +221,41 @@ public class FXMLDocumentController implements Initializable {
         });
     }
     
+   public void addLine(double x, double y, double x2, double y2){
+       Line l= new Line();
+       l.setId("line"+contadorLine++);
+       l.setStartX(x);
+       l.setStartY(y);
+       l.setEndX(x2);
+       l.setEndY(y2);
+       l.setStrokeWidth(5);
+       l.setStroke(colorPicker.getValue());
+        l.setOnMousePressed((e) ->{
+            l.setStroke(colorPicker.getValue());
+            if(borrar){
+                 sub1.setCursor(Cursor.DEFAULT);
+                borrar = false;
+                root.getChildren().remove(l);
+            }   
+        });
+       root.getChildren().add(l);
+    }
+   public void cursorBorrador(){
+       Image borrador = new Image(getClass().getResourceAsStream("borrador.png"));
+       sub1.setCursor(new ImageCursor(borrador,
+                                      borrador.getWidth()/2,
+                                      borrador.getHeight()/2));
+   }
+    
     public void addBox(double x, double y, double tam){
-        Box box = new Box(tam, tam,tam);
+        Box box = new Box(tam, tam*2,tam);
         PhongMaterial b = new PhongMaterial();
         b.setDiffuseColor(colorPicker.getValue());
         box.setMaterial(b);
         box.setOnMousePressed((e) ->{
             b.setDiffuseColor(colorPicker.getValue());
             if(borrar){
+                 sub1.setCursor(Cursor.DEFAULT);
                 borrar = false;
                 root.getChildren().remove(box);
             }   
@@ -239,8 +288,10 @@ public class FXMLDocumentController implements Initializable {
         cylinder.setOnMousePressed((e) ->{
             c.setDiffuseColor(colorPicker.getValue());
             if(borrar){
+                 sub1.setCursor(Cursor.DEFAULT);
                 borrar = false;
                 root.getChildren().remove(cylinder);
+                
             }   
         });
         Rotate rxC = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
@@ -264,6 +315,7 @@ public class FXMLDocumentController implements Initializable {
         sphere.setOnMousePressed((e) ->{
             s.setDiffuseColor(colorPicker.getValue());
             if(borrar){
+                 sub1.setCursor(Cursor.DEFAULT);
                 borrar = false;
                 root.getChildren().remove(sphere);
             }   
@@ -301,6 +353,7 @@ public class FXMLDocumentController implements Initializable {
     pyramid.setOnMousePressed((e) ->{
             p.setDiffuseColor(colorPicker.getValue());
             if(borrar){
+                 sub1.setCursor(Cursor.DEFAULT);
                 borrar = false;
                 root.getChildren().remove(pyramid);
             }   
@@ -324,6 +377,7 @@ public class FXMLDocumentController implements Initializable {
         camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
         camera.setTranslateZ(-1000);
+        
         camera.setFieldOfView(35);
         sub1.setCamera(camera);
         sub1.setRoot(root); 
@@ -358,11 +412,19 @@ public class FXMLDocumentController implements Initializable {
         iR.setFitWidth(30);
         btnRect.setGraphic(iR);
         
+        Image imageLine = new Image(getClass().getResourceAsStream("line.png"));
+        ImageView iL = new ImageView(imageLine);
+        iL.setFitHeight(20);
+        iL.setFitWidth(30);
+        btnLine.setGraphic(iL);
+        
         Image imageBorrador = new Image(getClass().getResourceAsStream("borrador.png"));
         ImageView iB = new ImageView(imageBorrador);
         iB.setFitHeight(25);
         iB.setFitWidth(35);
         btnBorrar.setGraphic(iB);
+        
+        
         
      
     } 
