@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="653.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="653.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
     <children>
         
     <AnchorPane layoutX="90.0" layoutY="30.0" prefHeight="597.0" prefWidth="635.0">
@@ -14,6 +14,9 @@
               <root>
                 <Region />
               </root>
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor>
             </SubScene>
             <ToolBar layoutX="-91.0" layoutY="-11.0" orientation="VERTICAL" prefHeight="635.0" prefWidth="70.0">
               <items>
@@ -22,8 +25,8 @@
                   <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB" />
                   <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC" />
                   <Button fx:id="btnSphere" layoutX="5.0" layoutY="150.0" mnemonicParsing="false" onAction="#setS" />
-                  <Button fx:id="btnPac" onAction="#setRec" mnemonicParsing="false" />
-                  <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" onAction="#borrar" text="Borrar" />
+                  <Button fx:id="btnRect" mnemonicParsing="false" onAction="#setRec" />
+                  <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" onAction="#borrar" />
               </items>
             </ToolBar>
          </children>
@@ -38,12 +41,20 @@
     <Menu text="Editar">
       <items>
         <MenuItem mnemonicParsing="false" text="Restablecer" />
-            <Menu mnemonicParsing="false" text="Figuras">
+            <Menu mnemonicParsing="false" text="Figuras 3D">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#setB" text="Cubo" />
                   <MenuItem mnemonicParsing="false" onAction="#setC" text="Cilindro" />
                   <MenuItem mnemonicParsing="false" onAction="#setP" text="Piramide" />
                   <MenuItem mnemonicParsing="false" onAction="#setS" text="Esfera" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Figuras 2D">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#setRec" text="Rectangulo" />
+                  <MenuItem mnemonicParsing="false" text="" />
+                  <MenuItem mnemonicParsing="false" text="" />
+                  <MenuItem mnemonicParsing="false" text="" />
               </items>
             </Menu>
       </items>

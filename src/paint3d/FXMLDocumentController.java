@@ -46,7 +46,7 @@ public class FXMLDocumentController implements Initializable {
     private ColorPicker colorPicker;
     
     @FXML
-    private Button btnBox, btnPac, btnCylinder, btnSphere,btnPyramid,btnBorrar;
+    private Button btnBox, btnRect, btnCylinder, btnSphere,btnPyramid,btnBorrar;
    
     @FXML
     private SubScene sub1;
@@ -184,11 +184,19 @@ public class FXMLDocumentController implements Initializable {
     public void addRec(double x, double y,double w,double h){
         Rectangle r = new Rectangle();
         r.setId("rec"+contadorRec++);
+        r.setFill(colorPicker.getValue());
         r.setX(x);
         r.setY(y);
         r.setWidth(w);
         r.setHeight(h);
         root.getChildren().add(r);
+        r.setOnMousePressed((e) ->{
+            r.setFill(colorPicker.getValue());
+            if(borrar){
+                borrar = false;
+                root.getChildren().remove(r);
+            }   
+        });
     }
     
     public void addBox(double x, double y, double tam){
@@ -343,6 +351,18 @@ public class FXMLDocumentController implements Initializable {
         ipy.setFitHeight(30);
         ipy.setFitWidth(30);
         btnPyramid.setGraphic(ipy);
+        
+        Image imageRectangulo = new Image(getClass().getResourceAsStream("rectagulo.png"));
+        ImageView iR = new ImageView(imageRectangulo);
+        iR.setFitHeight(30);
+        iR.setFitWidth(30);
+        btnRect.setGraphic(iR);
+        
+        Image imageBorrador = new Image(getClass().getResourceAsStream("borrador.png"));
+        ImageView iB = new ImageView(imageBorrador);
+        iB.setFitHeight(25);
+        iB.setFitWidth(35);
+        btnBorrar.setGraphic(iB);
         
      
     } 
