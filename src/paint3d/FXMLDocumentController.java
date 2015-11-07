@@ -8,8 +8,10 @@ package paint3d;
 
 import static java.lang.Math.abs;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -20,21 +22,19 @@ import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
+import static javafx.scene.shape.DrawMode.FILL;
+import static javafx.scene.shape.DrawMode.LINE;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.MeshView;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
@@ -50,50 +50,95 @@ public class FXMLDocumentController implements Initializable {
     private ColorPicker colorPicker;
     
     @FXML
-    private Button btnBox, btnRect, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
+    private Button btnBox, btnRect,btnSeleccionar, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
    
+    @FXML
+    private Slider anguloX, anguloY, anguloZ;
     @FXML
     private SubScene sub1;
     
     Group root = new Group(); 
     private String figura = "";
     boolean inDrag = false;
+    boolean bandColor = true;
+    boolean select = false;
     double startX = -1, startY = -1;
     boolean borrar = false;
     //Contadores de las figuras
     int contadorS = 0,contadorLine = 0,contadorB = 0,contadorP = 0,contadorC = 0,contadorRec=0;
     
+    
+    
+//------------------------Métodos para establecer figuras---------------//
      @FXML
     private void setRec(ActionEvent event) {
+        sub1.setCursor(Cursor.DEFAULT);
         figura = "rec";
     }
-     @FXML
+    
+    @FXML
     private void setB(ActionEvent event) {
+         sub1.setCursor(Cursor.DEFAULT);
         figura = "box";
     }
-    @FXML private void borrar(){
-        borrar = true;
-        cursorBorrador();
-    }
+    
     @FXML
     private void setC(ActionEvent event){
         figura = "cylinder";
     }
      @FXML
     private void setLine(ActionEvent event){
+         sub1.setCursor(Cursor.DEFAULT);
         figura = "line";
     }
     
     @FXML
     private void setS(ActionEvent event){
+         sub1.setCursor(Cursor.DEFAULT);
         figura = "sphere";
     }
    
     @FXML
     private void setP(ActionEvent event){
+         sub1.setCursor(Cursor.DEFAULT);
         figura = "pyramid";
     }
-    //Función para acomodar las coordenadas
+//------------Métodos de botones auxiliares-------------------------------------
+    @FXML private void borrar(){
+        borrar = true;
+        cursorBorrador();
+    }
+    
+    @FXML private void seleccionar(){
+        if(btnSeleccionar.getText().equals("seleccionar")){
+            btnSeleccionar.setText("deseleccionar");
+            select = true;
+        }else{
+            btnSeleccionar.setText("seleccionar");
+            select = false;
+        }
+        bandColor = true;
+    }
+    @FXML void clear(ActionEvent event){
+        root.getChildren().clear();
+    }
+    public void cursorBorrador(){
+       Image borrador = new Image(getClass().getResourceAsStream("borrador.png"));
+       sub1.setCursor(new ImageCursor(borrador,
+                                      borrador.getWidth()/2,
+                                      borrador.getHeight()/2));
+   }
+    
+   @FXML
+    private void AcercaDe(){
+        Alert alert=new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Créditos");
+        alert.setHeaderText("Universidad Politécnica de Chiapas");
+        alert.setContentText("Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
+        alert.showAndWait();
+    }
+    
+//-------------Métodos para manejar coordenadas en la subscena-------------------
     private double posX(double x){
         if(x<=370){
             return -370+x;
@@ -101,7 +146,6 @@ public class FXMLDocumentController implements Initializable {
             return (x - 371) + 1;
         }
     }
-    //Función para acomodar las coordenadas
     private double posY(double y){
         if(y<=315){
             return -315+y;
@@ -109,15 +153,15 @@ public class FXMLDocumentController implements Initializable {
            return (y - 316) * (315) / (314) + 1;
         }
     }
-
+//-----------Métodos para dibujar figuras---------------------------
     @FXML
     private void onMousePressedListener(MouseEvent e){
         this.startX = e.getX();
         this.startY = e.getY();
-        //Funcion para activar la lectura del drag en la funcion de drag
         inDrag = true;
         System.err.println("mousePressed at" + startX + ", "+ startY);
     }  
+    
     @FXML
     private void drag(MouseEvent e){
          double curX = e.getX();
@@ -127,11 +171,11 @@ public class FXMLDocumentController implements Initializable {
              sub1.setCursor(Cursor.CROSSHAIR);
              switch(figura){
                  case "box": 
-                     //Contador para quitar anterior
                      contadorB =contadorB-1;
                      id = "#"+figura+contadorB;
                      root.getChildren().remove(root.lookup(id));
-                     addBox(posX(startX),posY(startY),abs((curX-startX))*2);                     break;
+                     addBox(posX(startX),posY(startY),abs((curX-startX))*2);
+                     break;
                  case "cylinder": 
                      contadorC = contadorC-1;
                      id = "#"+figura+contadorC;
@@ -139,7 +183,6 @@ public class FXMLDocumentController implements Initializable {
                      addCylinder(posX(startX),posY(startY),abs((curX-startX)));
                      break;
                  case "sphere": 
-                     //se hace el contador -1 para eliminar la figura anterior del drag 
                      contadorS = contadorS-1;
                      id = "#"+figura+contadorS;
                      //método que elimina figura
@@ -165,23 +208,14 @@ public class FXMLDocumentController implements Initializable {
                      root.getChildren().remove(root.lookup(id));
                      addLine(posX(startX),posY(startY),posX(curX),posY(curY));
                      break;
-             }
-             //Elimina todas las figuras
-            //root.getChildren().clear();
-             
+             }             
         }
     }
-    
-    @FXML void clear(ActionEvent event){
-        root.getChildren().clear();
-    }
-    
+
     @FXML
     private void onReleased(MouseEvent e){
         inDrag = false;
         sub1.setCursor(Cursor.DEFAULT);
-        //Este switch es para aumentar los contadores para el id
-        //porque si no se aumentan se elmina la figura dibujada anterior siempre
         switch(figura){
             case "box": 
                 contadorB++;
@@ -201,8 +235,10 @@ public class FXMLDocumentController implements Initializable {
             case "line":
                 contadorLine++;
                 break;
-             }
+            }
     }
+    
+//----------------------Métodos de creación de figuras-----------------------
     public void addRec(double x, double y,double w,double h){
         Rectangle r = new Rectangle();
         r.setId("rec"+contadorRec++);
@@ -240,12 +276,7 @@ public class FXMLDocumentController implements Initializable {
         });
        root.getChildren().add(l);
     }
-   public void cursorBorrador(){
-       Image borrador = new Image(getClass().getResourceAsStream("borrador.png"));
-       sub1.setCursor(new ImageCursor(borrador,
-                                      borrador.getWidth()/2,
-                                      borrador.getHeight()/2));
-   }
+   
     
     public void addBox(double x, double y, double tam){
         Box box = new Box(tam, tam*2,tam);
@@ -253,13 +284,30 @@ public class FXMLDocumentController implements Initializable {
         b.setDiffuseColor(colorPicker.getValue());
         box.setMaterial(b);
         box.setOnMousePressed((e) ->{
-            b.setDiffuseColor(colorPicker.getValue());
-            if(borrar){
-                 sub1.setCursor(Cursor.DEFAULT);
-                borrar = false;
+            
+            if(select){
+                String[] aux = box.getId().split("box");
                 root.getChildren().remove(box);
-            }   
+                root.getChildren().add(box);
+                box.setDrawMode(LINE);
+                if(bandColor){
+                    colorPicker.setValue(b.getDiffuseColor());
+                    bandColor = false;
+                }else{
+                    b.setDiffuseColor(colorPicker.getValue());   
+                }
+                if(borrar){
+                    sub1.setCursor(Cursor.DEFAULT);
+                    borrar = false;
+                    root.getChildren().remove(box);
+                }   
+            }else{
+               
+                box.setDrawMode(FILL);
+            }          
+            
         });
+    
         //Se asigna un id a la esfera para poder elminarla facilmente
         box.setId("box"+contadorB++);
         box.setCullFace(CullFace.BACK);
@@ -270,9 +318,9 @@ public class FXMLDocumentController implements Initializable {
         Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryBox = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
         Rotate rzBox = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
-        rxBox.setAngle(30);
-        ryBox.setAngle(40);
-        rzBox.setAngle(0);
+        rxBox.setAngle(anguloX.getValue());
+        ryBox.setAngle(anguloY.getValue());
+        rzBox.setAngle(anguloZ.getValue());
         box.getTransforms().addAll(rxBox, ryBox, rzBox);
     }
     public void addCylinder(double x, double y, double radio){
@@ -297,9 +345,9 @@ public class FXMLDocumentController implements Initializable {
         Rotate rxC = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ryC = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
         Rotate rzC = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
-        rxC.setAngle(30);
-        ryC.setAngle(40);
-        rzC.setAngle(0);
+        rxC.setAngle(anguloX.getValue());
+        ryC.setAngle(anguloY.getValue());
+        rzC.setAngle(anguloZ.getValue());
         cylinder.getTransforms().addAll(rxC, ryC, rzC);
         
     }
@@ -423,17 +471,6 @@ public class FXMLDocumentController implements Initializable {
         iB.setFitHeight(25);
         iB.setFitWidth(35);
         btnBorrar.setGraphic(iB);
-        
-        
-        
-     
     } 
-    @FXML
-    private void AcercaDe(){
-        Alert alert=new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Créditos");
-        alert.setHeaderText("Universidad Politécnica de Chiapas");
-        alert.setContentText("Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
-        alert.showAndWait();
-    }
+    
 }

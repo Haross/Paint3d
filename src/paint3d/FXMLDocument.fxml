@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="653.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="653.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paint3d.FXMLDocumentController">
     <children>
         
     <AnchorPane layoutX="90.0" layoutY="30.0" prefHeight="597.0" prefWidth="635.0">
@@ -22,9 +22,16 @@
                   <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB" />
                   <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC" />
                   <Button fx:id="btnSphere" layoutX="5.0" layoutY="150.0" mnemonicParsing="false" onAction="#setS" />
-                  <Button fx:id="btnRect"   mnemonicParsing="false" onAction="#setRec" />
-                   <Button fx:id="btnLine"  mnemonicParsing="false" onAction="#setLine" />
+                  <Button fx:id="btnRect" mnemonicParsing="false" onAction="#setRec" />
+                   <Button fx:id="btnLine" mnemonicParsing="false" onAction="#setLine" />
+                  <Button fx:id="btnSeleccionar" mnemonicParsing="false" onAction="#seleccionar"  text="seleccionar" />
                   <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" onAction="#borrar" />
+                  <Label text="X" />
+                  <Slider fx:id="anguloX" prefHeight="14.0" prefWidth="101.0" />
+                  <Label text="Y" />
+                  <Slider fx:id="anguloY" prefHeight="14.0" prefWidth="101.0" />
+                  <Label text="z" />
+                  <Slider fx:id="anguloZ" prefHeight="14.0" prefWidth="101.0" />
               </items>
             </ToolBar>
          </children>
@@ -38,7 +45,7 @@
     </Menu>
     <Menu text="Editar">
       <items>
-        <MenuItem mnemonicParsing="false" text="Restablecer" onAction="#clear"/>
+        <MenuItem mnemonicParsing="false" onAction="#clear" text="Restablecer" />
             <Menu mnemonicParsing="false" text="Figuras 3D">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#setB" text="Cubo" />
