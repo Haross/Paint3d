@@ -101,13 +101,12 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML private void seleccionar(){
-        if(btnSeleccionar.getText().equals("Seleccionar")){
-        Image imageSeleccion = new Image(getClass().getResourceAsStream("open.png"));
-        ImageView iS = new ImageView(imageSeleccion);
-        iS.setFitHeight(30);
-        iS.setFitWidth(25);
-        btnSeleccionar.setGraphic(iS);
-            btnSeleccionar.setText("Deseleccionar");
+        if(select==false){
+            Image imageSeleccion = new Image(getClass().getResourceAsStream("open.png"));
+            ImageView iS = new ImageView(imageSeleccion);
+            iS.setFitHeight(30);
+            iS.setFitWidth(25);
+            btnSeleccionar.setGraphic(iS);
             figura = "";
             select = true;
             btnRotacion.setDisable(false);
@@ -117,7 +116,6 @@ public class FXMLDocumentController implements Initializable {
             iS.setFitHeight(30);
             iS.setFitWidth(25);
             btnSeleccionar.setGraphic(iS);
-            btnSeleccionar.setText("Seleccionar");
             select = false;
             noSeleccion();
             btnRotacion.setDisable(true);
