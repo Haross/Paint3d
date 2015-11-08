@@ -24,7 +24,7 @@
                   <Button fx:id="btnSphere" layoutX="5.0" layoutY="150.0" mnemonicParsing="false" onAction="#setS" />
                   <Button fx:id="btnRect" mnemonicParsing="false" onAction="#setRec" />
                    <Button fx:id="btnLine" mnemonicParsing="false" onAction="#setLine" />
-                  <Button fx:id="btnSeleccionar" mnemonicParsing="false" onAction="#seleccionar" text="seleccionar" />
+                  <Button fx:id="btnSeleccionar" mnemonicParsing="false" onAction="#seleccionar" />
                   <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" onAction="#borrar" />
                   <Button fx:id="btnRotacion" mnemonicParsing="false" onAction="#rotacionFigura" text="Aplicar rotacion" />
                   <Label text="X" />

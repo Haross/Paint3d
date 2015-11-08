@@ -42,17 +42,10 @@ import javafx.scene.transform.Rotate;
  * @author Javier, Josseline, Hugo
  */
 public class FXMLDocumentController implements Initializable {
-    
-    @FXML
-    private ColorPicker colorPicker;
-
-    @FXML
-    private Button btnBox, btnRotacion,btnRect,btnSeleccionar, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
-   
-    @FXML
-    private Slider anguloX, anguloY, anguloZ;
-    @FXML
-    private SubScene sub1;
+    @FXML private ColorPicker colorPicker;
+    @FXML private Button btnBox, btnRotacion,btnRect,btnSeleccionar, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
+    @FXML private Slider anguloX, anguloY, anguloZ;
+    @FXML private SubScene sub1;
     
     Group root = new Group(); 
     private String figura = "";
@@ -108,13 +101,23 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML private void seleccionar(){
-        if(btnSeleccionar.getText().equals("seleccionar")){
-            btnSeleccionar.setText("deseleccionar");
+        if(btnSeleccionar.getText().equals("Seleccionar")){
+        Image imageSeleccion = new Image(getClass().getResourceAsStream("open.png"));
+        ImageView iS = new ImageView(imageSeleccion);
+        iS.setFitHeight(30);
+        iS.setFitWidth(25);
+        btnSeleccionar.setGraphic(iS);
+            btnSeleccionar.setText("Deseleccionar");
             figura = "";
             select = true;
             btnRotacion.setDisable(false);
         }else{
-            btnSeleccionar.setText("seleccionar");
+            Image imageSeleccion = new Image(getClass().getResourceAsStream("hand.png"));
+            ImageView iS = new ImageView(imageSeleccion);
+            iS.setFitHeight(30);
+            iS.setFitWidth(25);
+            btnSeleccionar.setGraphic(iS);
+            btnSeleccionar.setText("Seleccionar");
             select = false;
             noSeleccion();
             btnRotacion.setDisable(true);
@@ -130,6 +133,7 @@ public class FXMLDocumentController implements Initializable {
             b.setDiffuseColor(colorPicker.getValue());   
         }
     }
+    
     @FXML private void rotacionFigura(){
         Rotate rx = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
         Rotate ry = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
@@ -160,6 +164,7 @@ public class FXMLDocumentController implements Initializable {
             shape3d.setMaterial(b);
         }
     }
+    
     private void noSeleccion(){
         if(shape3d != null){
         PhongMaterial b = (PhongMaterial) shape3d.getMaterial();
@@ -174,12 +179,12 @@ public class FXMLDocumentController implements Initializable {
         Image imageBox = new Image(getClass().getResourceAsStream("images.jpg"));
         b.setBumpMap(imageBox);
         root.getChildren().add(shape3d);
-    }
-    
+    } 
     
     @FXML void clear(ActionEvent event){
         root.getChildren().clear();
     }
+    
     public void cursorBorrador(){
        Image borrador = new Image(getClass().getResourceAsStream("borrador.png"));
        sub1.setCursor(new ImageCursor(borrador,
@@ -192,7 +197,7 @@ public class FXMLDocumentController implements Initializable {
         Alert alert=new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Créditos");
         alert.setHeaderText("Universidad Politécnica de Chiapas");
-        alert.setContentText("Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
+        alert.setContentText(" Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
         alert.showAndWait();
     }
     
@@ -406,7 +411,6 @@ public class FXMLDocumentController implements Initializable {
         });
     }
     
-    
     private void addTriangle(double x, double y, float h){
         TriangleMesh pyramidMesh = new TriangleMesh();
         pyramidMesh.getTexCoords().addAll(0,0);
@@ -449,8 +453,7 @@ public class FXMLDocumentController implements Initializable {
     private void closeButtonAction(){
         System.exit(0);
     }
- 
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         PerspectiveCamera camera = new PerspectiveCamera(true);
@@ -505,6 +508,11 @@ public class FXMLDocumentController implements Initializable {
         iB.setFitHeight(25);
         iB.setFitWidth(35);
         btnBorrar.setGraphic(iB);
-    } 
-    
+        
+        Image imageSeleccion = new Image(getClass().getResourceAsStream("hand.png"));
+        ImageView iS = new ImageView(imageSeleccion);
+        iS.setFitHeight(30);
+        iS.setFitWidth(25);
+        btnSeleccionar.setGraphic(iS);
+    }  
 }
