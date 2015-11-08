@@ -12,21 +12,15 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.AmbientLight;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Glow;
-import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -35,12 +29,10 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.DrawMode;
-import static javafx.scene.shape.DrawMode.FILL;
-import static javafx.scene.shape.DrawMode.LINE;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape3D;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
@@ -53,11 +45,9 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private ColorPicker colorPicker;
-    
+
     @FXML
-    private RadioButton rotation;
-    @FXML
-    private Button btnBox, btnRect,btnSeleccionar, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
+    private Button btnBox, btnRotacion,btnRect,btnSeleccionar, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
    
     @FXML
     private Slider anguloX, anguloY, anguloZ;
@@ -73,7 +63,7 @@ public class FXMLDocumentController implements Initializable {
     boolean borrar = false;
     //Contadores de las figuras
     int contadorS = 0,contadorLine = 0,contadorB = 0,contadorP = 0,contadorC = 0,contadorRec=0;
-    
+    Shape3D shape3d; //Guarda la figura seleccionada
     
     
 //------------------------Métodos para establecer figuras---------------//
@@ -91,6 +81,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void setC(ActionEvent event){
+        sub1.setCursor(Cursor.DEFAULT);
         figura = "cylinder";
     }
      @FXML
@@ -121,12 +112,71 @@ public class FXMLDocumentController implements Initializable {
             btnSeleccionar.setText("deseleccionar");
             figura = "";
             select = true;
+            btnRotacion.setDisable(false);
         }else{
             btnSeleccionar.setText("seleccionar");
             select = false;
+            noSeleccion();
+            btnRotacion.setDisable(true);
         }
         bandColor = true;
     }
+    
+    //Método que cambia el color de la figura seleccionada
+    @FXML private void cambioColor(){
+        System.out.println("color changed");
+        if(shape3d != null){
+            PhongMaterial b = (PhongMaterial) shape3d.getMaterial();
+            b.setDiffuseColor(colorPicker.getValue());   
+        }
+    }
+    @FXML private void rotacionFigura(){
+        Rotate rx = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
+        Rotate ry = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
+        Rotate rz = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
+        if(shape3d != null){
+            rx.setAngle(anguloX.getValue());
+            ry.setAngle(anguloY.getValue());
+            rz.setAngle(anguloZ.getValue());
+            shape3d.getTransforms().addAll(rx, ry, rz);
+        }
+    }
+    
+    //Este método sirve para posicionar y rotar
+    private void posicionYColor(Shape3D shape3d, double x, double y, double z){
+        Rotate rx = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
+        Rotate ry = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
+        Rotate rz = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
+        if(shape3d != null){
+            rx.setAngle(anguloX.getValue());
+            ry.setAngle(anguloY.getValue());
+            rz.setAngle(anguloZ.getValue());
+            shape3d.getTransforms().addAll(rx, ry, rz);
+            shape3d.setTranslateX(x);
+            shape3d.setTranslateY(y);
+            shape3d.setTranslateZ(z);
+            PhongMaterial b = new PhongMaterial();
+            b.setDiffuseColor(colorPicker.getValue());
+            shape3d.setMaterial(b);
+        }
+    }
+    private void noSeleccion(){
+        if(shape3d != null){
+        PhongMaterial b = (PhongMaterial) shape3d.getMaterial();
+        b.setBumpMap(null);
+        shape3d = null; 
+        }
+    }
+      //Metodo que resalta la figura seleccionada
+       private void hover(){  
+        PhongMaterial b = (PhongMaterial) shape3d.getMaterial();
+        root.getChildren().remove(shape3d);
+        Image imageBox = new Image(getClass().getResourceAsStream("images.jpg"));
+        b.setBumpMap(imageBox);
+        root.getChildren().add(shape3d);
+    }
+    
+    
     @FXML void clear(ActionEvent event){
         root.getChildren().clear();
     }
@@ -284,156 +334,90 @@ public class FXMLDocumentController implements Initializable {
         });
        root.getChildren().add(l);
     }
-     
+      
 //----------------------Métodos de creación de figuras 3D-----------------------
+   
+   /*Pasos
+        -Declaracion
+        -Etiqueta
+        -Color
+        -Posiciones
+        -CullFace
+        -Añadir figura a escena
+   
+   */
     public void addBox(double x, double y, double tam){
         Box box = new Box(tam, tam*2,tam);
-        PhongMaterial b = new PhongMaterial();
-        b.setDiffuseColor(colorPicker.getValue());
-        box.setMaterial(b);
         box.setId("box"+contadorB++);
+        posicionYColor(box,x,y,-100);
         box.setCullFace(CullFace.BACK);
-        box.setTranslateX(x);
-        box.setTranslateY(y);
-        box.setTranslateZ(-100);
         root.getChildren().add(box);
-        Rotate rxBox = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
-        Rotate ryBox = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
-        Rotate rzBox = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
-        rxBox.setAngle(anguloX.getValue());
-        ryBox.setAngle(anguloY.getValue());
-        rzBox.setAngle(anguloZ.getValue());
-        box.getTransforms().addAll(rxBox, ryBox, rzBox);
-        box.setOnMousePressed((e) ->{   
-            if(select){
-                String IDSelect = box.getId();
-                root.getChildren().remove(box);
-                Image imageBox = new Image(getClass().getResourceAsStream("images.jpg"));
-                b.setBumpMap(imageBox);
-                
-                root.getChildren().add(box);
-                
-                if(bandColor){
-                    colorPicker.setValue(b.getDiffuseColor());
-                    bandColor = false;
-                }else{
-                    b.setDiffuseColor(colorPicker.getValue());   
-                }
-                if(borrar){
+        
+        box.setOnMousePressed((e) ->{ 
+            if(borrar){
                     sub1.setCursor(Cursor.DEFAULT);
                     borrar = false;
                     root.getChildren().remove(box);
-                }   
-                //métodos para cambiar posicion
-            
-                if(rotation.isSelected()){
-                    rxBox.setAngle(anguloX.getValue());
-                
-                    ryBox.setAngle(anguloY.getValue());
-                     rzBox.setAngle(anguloZ.getValue());
-                     box.getTransforms().addAll(rxBox, ryBox, rzBox);
-                }
+            }   
+            if(select && shape3d == null){
+                shape3d = box;
+                hover();
             }
-        });
-        
+        }); 
     }
+    
     public void addCylinder(double x, double y, double radio){
         Cylinder cylinder = new Cylinder(radio,radio*2); 
-        PhongMaterial c = new PhongMaterial();
-        c.setDiffuseColor(colorPicker.getValue());
-        cylinder.setMaterial(c);
         cylinder.setId("cylinder"+contadorC++);
+        posicionYColor(cylinder,x,y,300);
         root.getChildren().add(cylinder);
-        cylinder.setTranslateX(x); 
-        cylinder.setTranslateY(y); 
-        cylinder.setTranslateZ(300);
-        Rotate rxC = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
-        Rotate ryC = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
-        Rotate rzC = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
-        rxC.setAngle(anguloX.getValue());
-        ryC.setAngle(anguloY.getValue());
-        rzC.setAngle(anguloZ.getValue());
-        cylinder.getTransforms().addAll(rxC, ryC, rzC);
         cylinder.setOnMousePressed((e) ->{
-            if(select){
-                root.getChildren().remove(cylinder);
-                Image imageBox = new Image(getClass().getResourceAsStream("images.jpg"));
-                c.setBumpMap(imageBox);
-                root.getChildren().add(cylinder);   
-                if(bandColor){
-                    colorPicker.setValue(c.getDiffuseColor());
-                    bandColor = false;
-                }else{
-                    c.setDiffuseColor(colorPicker.getValue());   
-                }
-                if(borrar){
+            if(borrar){
                     sub1.setCursor(Cursor.DEFAULT);
                     borrar = false;
                     root.getChildren().remove(cylinder);
-                }   
-                //métodos para cambiar posicion
-            
-                if(rotation.isSelected()){
-                    rxC.setAngle(anguloX.getValue());
-                    ryC.setAngle(anguloY.getValue());
-                    rzC.setAngle(anguloZ.getValue());
-                    cylinder.getTransforms().addAll(rxC, ryC, rzC);
-                }
+             }   
+            if(select && shape3d == null){
+                shape3d = cylinder;
+                hover(); 
             }
-        });
-
-        
-        
+        }); 
     }
+    
     public void addSphere(double x, double y, double radio){
         Sphere sphere = new Sphere(radio);
+        sphere.setId("sphere"+contadorS++);
         PhongMaterial s = new PhongMaterial();
         s.setDiffuseColor(colorPicker.getValue());
         sphere.setMaterial(s);
+        posicionYColor(sphere,x,y,30);
         sphere.setCullFace(CullFace.BACK);
-        sphere.setTranslateX(x);
-        sphere.setTranslateY(y);
-        sphere.setTranslateZ(30);
+        root.getChildren().add(sphere);
         sphere.setOnMousePressed((e) ->{
-            if(select){
-                root.getChildren().remove(sphere);
-                Image imageBox = new Image(getClass().getResourceAsStream("images.jpg"));
-                s.setBumpMap(imageBox);
-                
-                root.getChildren().add(sphere);
-                
-                if(bandColor){
-                    colorPicker.setValue(s.getDiffuseColor());
-                    bandColor = false;
-                }else{
-                    s.setDiffuseColor(colorPicker.getValue());   
-                }
-                if(borrar){
+            if(borrar){
                     sub1.setCursor(Cursor.DEFAULT);
                     borrar = false;
                     root.getChildren().remove(sphere);
-                }            
+            }     
+            if(select){
+                shape3d = sphere;
+                hover();      
             }
         });
-        btnSeleccionar.setOnAction((e)->{
-            seleccionar();
-            s.setBumpMap(null);
-        });
-        //Se asigna un id a la esfera para poder elminarla facilmente
-        sphere.setId("sphere"+contadorS++);
-        root.getChildren().add(sphere);
     }
+    
+    
     private void addTriangle(double x, double y, float h){
         TriangleMesh pyramidMesh = new TriangleMesh();
         pyramidMesh.getTexCoords().addAll(0,0);
-     //h = 175;                    // Height
-    float s = 300;                    // Side
+        //h = 175;                    // Height
+        float s = h/2;                    // Side
         pyramidMesh.getPoints().addAll(
         0,    0,    0,            // Point 0 - Top
-        0,    h,    -s/2,         // Point 1 - Front
-        -s/2, h,    0,            // Point 2 - Left
-        s/2,  h,    0,            // Point 3 - Back
-        0,    h,    s/2           // Point 4 - Right
+        0,    h,    -s,         // Point 1 - Front
+        -s, h,    0,            // Point 2 - Left
+        s,  h,    0,            // Point 3 - Back
+        0,    h,    s           // Point 4 - Right
     );
         pyramidMesh.getFaces().addAll(
         0,0,  2,0,  1,0,          // Front left face
@@ -445,35 +429,19 @@ public class FXMLDocumentController implements Initializable {
     ); 
     MeshView pyramid = new MeshView(pyramidMesh);
     pyramid.setId("pyramid"+contadorP++);
-    pyramid.setDrawMode(DrawMode.FILL);
-    pyramid.setCullFace(CullFace.BACK);
-    PhongMaterial p = new PhongMaterial();
-    p.setDiffuseColor(colorPicker.getValue());
+    pyramid.setCullFace(CullFace.NONE);
     pyramid.setOnMousePressed((e) ->{
-            if(select){
-                root.getChildren().remove(pyramid);
-                Image imageBox = new Image(getClass().getResourceAsStream("images.jpg"));
-                p.setBumpMap(imageBox);
-                
-                root.getChildren().add(pyramid);
-                
-                if(bandColor){
-                    colorPicker.setValue(p.getDiffuseColor());
-                    bandColor = false;
-                }else{
-                    p.setDiffuseColor(colorPicker.getValue());   
-                }
-                if(borrar){
+            if(borrar){
                     sub1.setCursor(Cursor.DEFAULT);
                     borrar = false;
                     root.getChildren().remove(pyramid);
-                }            
+                }   
+            if(select && shape3d == null){
+                shape3d = pyramid;
+                hover();         
             }
         });
-    pyramid.setMaterial(p);
-    pyramid.setTranslateX(x);
-    pyramid.setTranslateY(y);
-    pyramid.setTranslateZ(30);
+    posicionYColor(pyramid,x,y,30);
     root.getChildren().add(pyramid);
     }
     
@@ -495,7 +463,7 @@ public class FXMLDocumentController implements Initializable {
         sub1.setRoot(root); 
        
         colorPicker.setValue(Color.RED);
-        
+        btnRotacion.setDisable(true);
         Image imageBox = new Image(getClass().getResourceAsStream("cubo.png"));
         ImageView iv = new ImageView(imageBox);
         iv.setFitWidth(30);

@@ -17,7 +17,7 @@
             </SubScene>
             <ToolBar layoutX="-91.0" layoutY="-11.0" orientation="VERTICAL" prefHeight="635.0" prefWidth="70.0">
               <items>
-                  <ColorPicker fx:id="colorPicker" prefHeight="25.0" prefWidth="45.0" />
+                  <ColorPicker fx:id="colorPicker" onAction="#cambioColor" prefHeight="25.0" prefWidth="45.0" />
                    <Button fx:id="btnPyramid" layoutX="5.0" layoutY="203.0" mnemonicParsing="false" onAction="#setP" />
                   <Button fx:id="btnBox" layoutX="5.0" layoutY="45.0" mnemonicParsing="false" onAction="#setB" />
                   <Button fx:id="btnCylinder" layoutX="5.0" layoutY="97.0" mnemonicParsing="false" onAction="#setC" />
@@ -26,7 +26,7 @@
                    <Button fx:id="btnLine" mnemonicParsing="false" onAction="#setLine" />
                   <Button fx:id="btnSeleccionar" mnemonicParsing="false" onAction="#seleccionar" text="seleccionar" />
                   <Button fx:id="btnBorrar" layoutX="5.0" layoutY="170.0" mnemonicParsing="false" onAction="#borrar" />
-                  <RadioButton fx:id="rotation"  mnemonicParsing="false" text="Rotacion" />
+                  <Button fx:id="btnRotacion" mnemonicParsing="false" onAction="#rotacionFigura" text="Aplicar rotacion" />
                   <Label text="X" />
                   <Slider fx:id="anguloX" prefHeight="14.0" prefWidth="101.0" />
                   <Label text="Y" />
