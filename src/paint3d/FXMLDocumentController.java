@@ -22,17 +22,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.CullFace;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape3D;
-import javafx.scene.shape.Sphere;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.transform.Rotate;
 
 /**
  *
@@ -46,11 +35,10 @@ public class FXMLDocumentController implements Initializable {
     
     paint p = new paint();
    double startX, startY;
-    boolean inDrag = false;
 //------------------------Métodos para establecer figuras---------------//
      @FXML
     private void setRec(ActionEvent event) {
-        
+        p.setActualFigura("rec");
     }
     
     @FXML
@@ -64,7 +52,7 @@ public class FXMLDocumentController implements Initializable {
     }
      @FXML
     private void setLine(ActionEvent event){
-        
+        p.setActualFigura("line");
     }
     
     @FXML
@@ -98,8 +86,11 @@ public class FXMLDocumentController implements Initializable {
     
     //Método que cambia el color de la figura seleccionada
     @FXML private void cambioColor(){
-        System.out.println("color changed");
-        p.color(p.getActualFigura(),colorPicker.getValue() );
+        if(p.getActualFigura() != null ){
+            p.color(p.getActualFigura(),colorPicker.getValue() );
+            return;
+        }
+        p.setColor2d(colorPicker.getValue()); 
     }
     
     @FXML private void rotacionFigura(){
@@ -121,26 +112,34 @@ public class FXMLDocumentController implements Initializable {
     
 //-------------Métodos para manejar coordenadas en la subscena-------------------
     private double posX(double x){
-        if(x<=370){
-            return -370+x;
+        double aux = sub1.getHeight();
+        if(x<=aux/2){
+            return -aux/2+x;
         }else{
-            return (x - 371) + 1;
+            return (x - (aux+1)/2) *(aux/2) + 1;
         }
     }
     private double posY(double y){
-        if(y<=322){
-            return -322+y;
+        double aux = sub1.getWidth();
+        if(y<=aux/2){
+            return -aux/2+y;
         }else{ 
-           return (y - 323) * (322) / (321) + 1;
+            System.out.println(map(y,aux/2,aux,0,aux/2));
+           return map(y,aux/2,aux,0,aux/2);
         }
     }
+    private double map(double x, double in_min, double in_max, double out_min, double out_max){
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
+        
+    
 //-----------Métodos para dibujar figuras---------------------------
     @FXML
     private void onMousePressedListener(MouseEvent e){
         p.setDragging(true); 
         this.startX = e.getX();
         this.startY = e.getY();
-        inDrag = true;
         System.err.println("mousePressed at" + startX + ", "+ startY);
     }  
     
@@ -148,7 +147,7 @@ public class FXMLDocumentController implements Initializable {
     private void drag(MouseEvent e){
          double curX = e.getX();
          double curY = e.getY();      
-         if (inDrag == true) {
+         if (p.getDragging()) {
              sub1.setCursor(Cursor.CROSSHAIR);
              switch(p.getNombreActualFigura()){
                  case "box": 
@@ -163,18 +162,12 @@ public class FXMLDocumentController implements Initializable {
                  case "pyramid": 
                     p.addPyramid(posX(startX),posY(startY),(float)abs((curX-startX)*2),colorPicker.getValue());
                      break;
-                 /*case "rec":
-                     contadorRec = contadorRec-1;
-                     id = "#"+figura+contadorRec;
-                     System.out.println(root.getChildren().remove(root.lookup(id)));
-                     addRec(posX(startX),posY(startY),abs((curX-startX)),abs((curY-startY)));
+                 case "rec":
+                     p.addRec(posX(startX),posY(startY),abs((curX-startX)),abs((curY-startY)),colorPicker.getValue());
                      break;
                  case "line":
-                     contadorLine = contadorLine-1;
-                     id = "#"+figura+contadorLine;
-                     root.getChildren().remove(root.lookup(id));
-                     addLine(posX(startX),posY(startY),posX(curX),posY(curY));
-                     break;*/
+                     p.addLine(posX(startX),posY(startY),posX(curX),posY(curY),colorPicker.getValue());
+                     break;
              }   
              p.setRotacion(p.getLast(), anguloX.getValue(), anguloY.getValue(), anguloZ.getValue());
         }
@@ -182,51 +175,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void onReleased(MouseEvent e){
-        inDrag = false;
-        p.setDragging(inDrag);
+        p.setDragging(false);
         p.setNew();
     }
-  /*  
-//----------------------Métodos de creación de figuras 2D-----------------------
-    public void addRec(double x, double y,double w,double h){
-        Rectangle r = new Rectangle();
-        r.setId("rec"+contadorRec++);
-        r.setFill(colorPicker.getValue());
-        r.setX(x);
-        r.setY(y);
-        r.setWidth(w-5);
-        r.setHeight(h-5);
-        root.getChildren().add(r);
-        r.setOnMousePressed((e) ->{
-            r.setFill(colorPicker.getValue());
-            if(borrar){
-                borrar = false;
-                root.getChildren().remove(r);
-            }   
-        });
-    }
-    
-   public void addLine(double x, double y, double x2, double y2){
-       Line l= new Line();
-       l.setId("line"+contadorLine++);
-       l.setStartX(x);
-       l.setStartY(y);
-       l.setEndX(x2);
-       l.setEndY(y2);
-       l.setStrokeWidth(5);
-       l.setStroke(colorPicker.getValue());
-        l.setOnMousePressed((e) ->{
-            l.setStroke(colorPicker.getValue());
-            if(borrar){
-                 sub1.setCursor(Cursor.DEFAULT);
-                borrar = false;
-                root.getChildren().remove(l);
-            }   
-        });
-       root.getChildren().add(l);
-    }
-      
-*/
+
     @FXML
     private void closeButtonAction(){
         System.exit(0);
@@ -234,7 +186,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         p.setSubScene(sub1);        
+        p.setSubScene(sub1);        
         colorPicker.setValue(Color.RED);
         btnRotacion.setDisable(true);
         btnBox.setGraphic(icono("cubo.png",30,30));
@@ -254,7 +206,4 @@ public class FXMLDocumentController implements Initializable {
         iS.setFitWidth(width);
         return iS;
     }
-    
-    
-    
 }
