@@ -50,8 +50,8 @@ public class paint {
      *
      * @param subScene contiene la subscene donde se dibujaran las figuras
      */
-    public paint(SubScene subScene) {
-        setSubScene(subScene);
+    public paint(SubScene subScene,double x,double y) {
+        setSubScene(subScene,x,y);
     }
 
     /**
@@ -66,13 +66,15 @@ public class paint {
      *
      * @param subScene
      */
-    public void setSubScene(SubScene subScene) {
+    public void setSubScene(SubScene subScene, double x, double y) {
         this.subScene = subScene;
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
         camera.setTranslateZ(-1000);
         camera.setFieldOfView(35);
+        camera.setLayoutX(x);
+        camera.setLayoutY(y);
         subScene.setCamera(camera);
         subScene.setRoot(root);
 
@@ -203,6 +205,7 @@ public class paint {
      * @param colorValue
      */
     public void addBox(double x, double y, double tam, Color colorValue) {
+        System.out.println("cubo");
         if (drag) {
             contadorB = contadorB - 1;
             String id = "#box" + contadorB;

@@ -108,39 +108,14 @@ public class FXMLDocumentController implements Initializable {
         alert.setHeaderText("Universidad Politécnica de Chiapas");
         alert.setContentText(" Josseline Juliane Arreola Cruz | Matricula: 143471\n Javier de Jesús Flores Herrera | Matricula: 143372 \n Hugo Sarmiento Toledo | Matricula: 143359 \n Dr. Juan Carlos López Pimentel \n Programación Visual");
         alert.showAndWait();
-    }
-    
-//-------------Métodos para manejar coordenadas en la subscena-------------------
-    private double posX(double x){
-        double aux = sub1.getHeight();
-        if(x<=aux/2){
-            return -aux/2+x;
-        }else{
-            return (x - (aux+1)/2) *(aux/2) + 1;
-        }
-    }
-    private double posY(double y){
-        double aux = sub1.getWidth();
-        if(y<=aux/2){
-            return -aux/2+y;
-        }else{ 
-            System.out.println(map(y,aux/2,aux,0,aux/2));
-           return map(y,aux/2,aux,0,aux/2);
-        }
-    }
-    private double map(double x, double in_min, double in_max, double out_min, double out_max){
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
-
-        
-    
+    }       
 //-----------Métodos para dibujar figuras---------------------------
     @FXML
     private void onMousePressedListener(MouseEvent e){
         p.setDragging(true); 
         this.startX = e.getX();
         this.startY = e.getY();
-        System.err.println("mousePressed at" + startX + ", "+ startY);
+        System.err.println("Coordenadas del mouse" + startX + ", "+ startY);
     }  
     
     @FXML
@@ -151,22 +126,22 @@ public class FXMLDocumentController implements Initializable {
              sub1.setCursor(Cursor.CROSSHAIR);
              switch(p.getNombreActualFigura()){
                  case "box": 
-                     p.addBox(posX(startX),posY(startY),abs((curX-startX))*2, colorPicker.getValue());
+                     p.addBox(startX,startY,abs((curX-startX))*2, colorPicker.getValue());
                      break;
                  case "cylinder": 
-                     p.addCylinder(posX(startX),posY(startY),abs((curX-startX)), colorPicker.getValue());
+                     p.addCylinder(startX,startY,abs((curX-startX)), colorPicker.getValue());
                      break;
                  case "sphere": 
-                     p.addSphere(posX(startX),posY(startY),abs((curX-startX)*1.1),colorPicker.getValue());
+                     p.addSphere(startX,startY,abs((curX-startX)*1.1),colorPicker.getValue());
                      break;
                  case "pyramid": 
-                    p.addPyramid(posX(startX),posY(startY),(float)abs((curX-startX)*2),colorPicker.getValue());
+                    p.addPyramid(startX,startY,(float)abs((curX-startX)*2),colorPicker.getValue());
                      break;
                  case "rec":
-                     p.addRec(posX(startX),posY(startY),abs((curX-startX)),abs((curY-startY)),colorPicker.getValue());
+                     p.addRec(startX,startY,abs((curX-startX)),abs((curY-startY)),colorPicker.getValue());
                      break;
                  case "line":
-                     p.addLine(posX(startX),posY(startY),posX(curX),posY(curY),colorPicker.getValue());
+                     p.addLine(startX,startY,curX,curY,colorPicker.getValue());
                      break;
              }   
              p.setRotacion(p.getLast(), anguloX.getValue(), anguloY.getValue(), anguloZ.getValue());
@@ -186,8 +161,10 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        p.setSubScene(sub1);        
+        p.addBox(0,0,20,colorPicker.getValue());
+        p.setSubScene(sub1,sub1.getHeight()/2,sub1.getWidth()/2.4);        
         colorPicker.setValue(Color.RED);
+        
         btnRotacion.setDisable(true);
         btnBox.setGraphic(icono("cubo.png",30,30));
         btnCylinder.setGraphic(icono("cilindro.png",30,30));
