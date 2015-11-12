@@ -193,7 +193,7 @@ public class paint {
             case "line":
                 contadorLine++;
                 break;
-            case "prismRec":
+            case "prismaRec":
                 contadorPrismaRec++;
                 break;
         }
@@ -243,14 +243,14 @@ public class paint {
      * @param colorValue
      */
     public void addPrismaRec(double x, double y, double tamX, double tamY,double tamZ, Color colorValue) {
-        System.out.println("cubo");
+        System.out.println("prisma");
         if (drag) {
-            contadorB = contadorB - 1;
-            String id = "#prismaRec" + contadorB;
+            contadorPrismaRec = contadorPrismaRec - 1;
+            String id = "#prismaRec" + contadorPrismaRec;
             root.getChildren().remove(root.lookup(id));
         }
         Box prisma = new Box(tamX, tamY, tamZ);
-        prisma.setId("prismaRec" + contadorB++);
+        prisma.setId("prismaRec" + contadorPrismaRec++);
         posicion(prisma, x, y, 0);
         color(prisma, colorValue);
         prisma.setCullFace(CullFace.BACK);
@@ -264,6 +264,7 @@ public class paint {
             }
             if (seleccion && shape3d == null) {
                 shape3d = prisma;
+                System.out.println(shape3d);
                 hover();
             }
         });

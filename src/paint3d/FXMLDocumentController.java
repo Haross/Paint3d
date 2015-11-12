@@ -29,7 +29,7 @@ import javafx.scene.paint.Color;
  */
 public class FXMLDocumentController implements Initializable {
     @FXML private ColorPicker colorPicker;
-    @FXML private Button btnBox, btnRotacion,btnRect,btnSeleccionar, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
+    @FXML private Button btnBox, btnRotacion,btnRect,btnSeleccionar,btnPrismaRec, btnCylinder, btnSphere,btnPyramid,btnBorrar, btnLine;
     @FXML private Slider anguloX, anguloY, anguloZ;
     @FXML public SubScene sub1;  
     
@@ -39,6 +39,9 @@ public class FXMLDocumentController implements Initializable {
      @FXML
     private void setRec(ActionEvent event) {
         p.setActualFigura("rec");
+    }
+    @FXML private void setPrisma(ActionEvent e){
+        p.setActualFigura("prismaRec");
     }
     
     @FXML
@@ -125,7 +128,10 @@ public class FXMLDocumentController implements Initializable {
          if (p.getDragging()) {
              sub1.setCursor(Cursor.CROSSHAIR);
              switch(p.getNombreActualFigura()){
-                 case "box": 
+                 case "box":
+                     p.addBox(startX, startY,abs((curX-startX)), colorPicker.getValue());
+                     break;
+                 case "prismaRec": 
                      p.addPrismaRec(startX,startY,abs((curX-startX))*2,abs((curX-startX))*4,abs((curX-startX))*2, colorPicker.getValue());
                      break;
                  case "cylinder": 
