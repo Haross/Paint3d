@@ -126,7 +126,7 @@ public class FXMLDocumentController implements Initializable {
              sub1.setCursor(Cursor.CROSSHAIR);
              switch(p.getNombreActualFigura()){
                  case "box": 
-                     p.addBox(startX,startY,abs((curX-startX))*2, colorPicker.getValue());
+                     p.addPrismaRec(startX,startY,abs((curX-startX))*2,abs((curX-startX))*4,abs((curX-startX))*2, colorPicker.getValue());
                      break;
                  case "cylinder": 
                      p.addCylinder(startX,startY,abs((curX-startX)), colorPicker.getValue());
@@ -161,8 +161,8 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        p.addBox(0,0,20,colorPicker.getValue());
-        p.setSubScene(sub1,sub1.getHeight()/2,sub1.getWidth()/2.4);        
+        p.addBox(0,0,20,Color.YELLOWGREEN);
+        p.setSubScene(sub1);        
         colorPicker.setValue(Color.RED);
         
         btnRotacion.setDisable(true);

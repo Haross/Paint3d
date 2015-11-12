@@ -41,7 +41,7 @@ public class paint {
     Color color2d;
     private SubScene subScene;
 
-    int contadorS = 0, contadorLine = 0, contadorB = 0, contadorP = 0, contadorC = 0, contadorRec = 0;
+    int contadorS = 0, contadorLine = 0,contadorPrismaRec = 0, contadorB = 0, contadorP = 0, contadorC = 0, contadorRec = 0;
     boolean seleccion = false;
 
     /**
@@ -51,7 +51,7 @@ public class paint {
      * @param subScene contiene la subscene donde se dibujaran las figuras
      */
     public paint(SubScene subScene,double x,double y) {
-        setSubScene(subScene,x,y);
+        setSubScene(subScene);
     }
 
     /**
@@ -66,15 +66,15 @@ public class paint {
      *
      * @param subScene
      */
-    public void setSubScene(SubScene subScene, double x, double y) {
+    public void setSubScene(SubScene subScene) {
         this.subScene = subScene;
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(20000.0);
         camera.setTranslateZ(-1000);
         camera.setFieldOfView(35);
-        camera.setLayoutX(x);
-        camera.setLayoutY(y);
+        camera.setLayoutX(subScene.getWidth()/2.1);
+        camera.setLayoutY(subScene.getHeight()/2);
         subScene.setCamera(camera);
         subScene.setRoot(root);
 
@@ -158,8 +158,8 @@ public class paint {
     }
 
     /**
-     * Método que establece la figura. Sólo se permite: cylinder, box, pyramid,
-     * sphere
+     * Método que establece la figura. Sólo se permite: cylinder (cilindro), box(cubo), pyramid(piramide),
+     * sphere(esfera), rec(rectangulo), line(linea), prismaRec(prisma rectangular)
      *
      * @param figura variable que recibe el nombre de la figura
      */
@@ -193,6 +193,9 @@ public class paint {
             case "line":
                 contadorLine++;
                 break;
+            case "prismRec":
+                contadorPrismaRec++;
+                break;
         }
     }
 
@@ -213,7 +216,7 @@ public class paint {
         }
         Box box = new Box(tam, tam, tam);
         box.setId("box" + contadorB++);
-        posicion(box, x, y, -100);
+        posicion(box, x, y, 0);
         color(box, colorValue);
         box.setCullFace(CullFace.BACK);
         root.getChildren().add(box);
@@ -226,6 +229,41 @@ public class paint {
             }
             if (seleccion && shape3d == null) {
                 shape3d = box;
+                hover();
+            }
+        });
+
+    }
+    /**
+     * Método que añade un cubo a la subScene
+     *
+     * @param x posición en el eje X
+     * @param y posición en el eje Y
+     * @param tam tamaño que tendrá el cubo
+     * @param colorValue
+     */
+    public void addPrismaRec(double x, double y, double tamX, double tamY,double tamZ, Color colorValue) {
+        System.out.println("cubo");
+        if (drag) {
+            contadorB = contadorB - 1;
+            String id = "#prismaRec" + contadorB;
+            root.getChildren().remove(root.lookup(id));
+        }
+        Box prisma = new Box(tamX, tamY, tamZ);
+        prisma.setId("prismaRec" + contadorB++);
+        posicion(prisma, x, y, 0);
+        color(prisma, colorValue);
+        prisma.setCullFace(CullFace.BACK);
+        root.getChildren().add(prisma);
+        ultimaFigura = prisma;
+        prisma.setOnMousePressed((e) -> {
+            if (borrar) {
+                subScene.setCursor(Cursor.DEFAULT);
+                borrar = false;
+                root.getChildren().remove(prisma);
+            }
+            if (seleccion && shape3d == null) {
+                shape3d = prisma;
                 hover();
             }
         });
@@ -248,7 +286,7 @@ public class paint {
         Sphere sphere = new Sphere(radio);
         sphere.setId("sphere" + contadorS++);
         color(sphere, colorValue);
-        posicion(sphere, x, y, 30);
+        posicion(sphere, x, y, 0);
         sphere.setCullFace(CullFace.BACK);
         root.getChildren().add(sphere);
         ultimaFigura = sphere;
@@ -281,7 +319,7 @@ public class paint {
         Cylinder cylinder = new Cylinder(radio, radio * 2);
         cylinder.setId("cylinder" + contadorC++);
         color(cylinder, colorValue);
-        posicion(cylinder, x, y, 300);
+        posicion(cylinder, x, y, 0);
         root.getChildren().add(cylinder);
         ultimaFigura = cylinder;
         cylinder.setOnMousePressed((e) -> {
@@ -332,7 +370,7 @@ public class paint {
         MeshView pyramid = new MeshView(pyramidMesh);
         pyramid.setId("pyramid" + contadorP++);
         pyramid.setCullFace(CullFace.NONE);
-        posicion(pyramid, x, y, 30);
+        posicion(pyramid, x, y, 0);
         root.getChildren().add(pyramid);
         ultimaFigura = pyramid;
         pyramid.setOnMousePressed((e) -> {
@@ -420,6 +458,14 @@ public class paint {
         return (Shape3D) root.lookup("#" + "box" + aux);
     }
 
+     /**
+     *
+     * @return regresa el último prisma rectangular creado
+     */
+    public Shape3D getPrismaRec() {
+        int aux = contadorPrismaRec - 1;
+        return (Shape3D) root.lookup("#" + "prismaRec" + aux);
+    }
     /**
      *
      * @return regresa la última esfera creada
